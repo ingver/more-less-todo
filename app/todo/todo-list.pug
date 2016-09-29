@@ -1,0 +1,5 @@
+ul#todo-list.list-group
+  each item in list
+    li.list-group-item
+      input.todoCheck(type='checkbox' checked=item.checked)
+      span= item.val

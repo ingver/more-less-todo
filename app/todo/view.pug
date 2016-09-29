@@ -1,0 +1,29 @@
+extends ../layout
+
+mixin todoList
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        input.panel-title(placeholder='What do you need to do?')
+        button.btn.btn-primary(type='button') Add
+      .panel-body
+        .progress
+          .progress-bar.progress-bar-success(
+            role='progressbar'
+            aria-valuenow='65'
+            aria-valuemin='0'
+            aria-valuemax='100'
+            style='width: 65%')
+              | 65% Complete
+
+        include todo-list.pug
+
+append styles
+    link(rel='stylesheet' href='/todo/styles.css')
+
+block content
+  h1 TODO
+  +todoList
+
+append scripts
+  script(src='/todo/script.js')
