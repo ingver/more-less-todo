@@ -86,14 +86,12 @@ function recalcProgress() {
 
     if ($checks.length === 0) {
         $progress
-            .prop('value-now', '0')
             .css('width', '0%');
     } else {
         var number = $checks.filter(':checked').length,
             percent = number / $checks.length * 100;
 
         $progress
-            .prop('value-now', percent)
             .css('width', percent + '%');
     }
 }
