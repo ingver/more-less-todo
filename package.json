@@ -14,5 +14,8 @@
     "pug": "^2.0.0-beta6",
     "ramda": "^0.22.1",
     "serve-favicon": "~2.3.0"
+  },
+  "engines": {
+    "node": "6.x"
   }
 }

@@ -85,13 +85,11 @@ function recalcProgress() {
         $progress = $('#todo-progress');
 
     if ($checks.length === 0) {
-        $progress
-            .css('width', '0%');
+        $progress.css('width', '0%');
     } else {
         var number = $checks.filter(':checked').length,
             percent = number / $checks.length * 100;
 
-        $progress
-            .css('width', percent + '%');
+        $progress.css('width', percent + '%');
     }
 }
