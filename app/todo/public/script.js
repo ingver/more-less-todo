@@ -1,6 +1,10 @@
 'use strict'
 
 $(function() {
+    $.ajaxSetup({
+        contentType: 'application/json'
+    });
+
     var controller = TodoController();
     controller.init();
 });
@@ -8,33 +12,33 @@ $(function() {
 function TodoController() {
     return {
         init: function() {
-            getTodos(function(res) {
-                console.log('response');
-                console.log(res);
-                this.todos = res;
-            }.bind(this));
-
             registerEvents();
         }
     };
 }
 
+function registerEvents() {
+    $('.todo-check').click(function(e) {
+        var $el = $(e.target);
+        var id = $el.closest('li').data('id');
+        var checked = $el.prop('checked');
+        var params = { id: id, checked: checked };
 
-function getTodos(callback) {
-    var $todoList = $('#todo-list');
-
-    $.get('/todo/get', callback)
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        console.error(
-            'Failed to get TODO list. ' + textStatus + ': ' + errorThrown);
+        postJSON('/todo/check', params, render, 'html');
     });
-};
-
-
-function showProps(o) {
-    for (key in o)
-        console.log(key, o[key]);
 }
 
-function registerEvents() {
+function postJSON(url, data, cb, type) {
+    $.post(url, JSON.stringify(data), cb, type)
+    .fail(ajaxErrorHandler);
+}
+
+function render(html) {
+    $('#todo-list-container').html(html);
+    registerEvents();
+}
+
+function ajaxErrorHandler(jqXHR, textStatus, errorThrown) {
+    console.error('ajax error');
+    console.error(textStatus + ': ' + errorThrown);
 }

@@ -16,7 +16,8 @@ mixin todoList
             style='width: 65%')
               | 65% Complete
 
-        include todo-list.pug
+        #todo-list-container
+          include todo-list.pug
 
 append styles
     link(rel='stylesheet' href='/todo/styles.css')

@@ -1,3 +1,4 @@
+const { is, type } = require('ramda');
 const TodoModel = require('./model');
 
 function initTodo(app) {
@@ -6,34 +7,45 @@ function initTodo(app) {
     const router = express.Router();
 
     const Todo = TodoModel.create();
+    const mainViewPath = path.join(__dirname, 'view.pug');
+    const todoViewPath = path.join(__dirname, 'todo-list.pug');
+
     // initial data
     Todo.addItem('First');
     Todo.addItem('Second');
     Todo.check(1, true);
 
     router.get('/', function(req, res) {
-        const viewPath = path.join(__dirname, 'view.pug');
         const list = Todo.getList();
-        res.render(viewPath, { list }, function(err, html) {
-            if (err) return console.error(err);
-            res.send(html);
-        });
+
+        renderSafe(res, mainViewPath, { list });
     });
 
-    router.get('/get', function(req, res) {
-        console.log('Sending todo list to client');
-        const list = Todo.getList();
+    router.post('/check', function(req, res) {
+        const { id, checked } = req.body;
 
-        const viewPath = path.join(__dirname, 'todo-list.pug');
-        res.render(viewPath, { list }, function(err, html) {
-            if (err) return console.error(err);
-            res.send(html);
-        });
+        if (is(Number, id) && is(Boolean, checked)) {
+            Todo.check(id, checked);
+        } else {
+            const msg = 'invalid id or checked';
+            console.error(msg);
+        }
+
+        // update client view
+        const list = Todo.getList();
+        renderSafe(res, todoViewPath, { list });
     });
 
     router.use(express.static(path.join(__dirname, 'public')));
 
     app.use('/todo', router);
+}
+
+function renderSafe(res, path, data) {
+    res.render(path, data, function(err, html) {
+        if (err) return console.error(err);
+        res.end(html);
+    });
 }
 
 exports.init = initTodo;
