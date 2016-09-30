@@ -41,10 +41,24 @@ function initTodo(app) {
         if (is(String, text)) {
             Todo.addItem(text);
         } else {
-            const msg = 'invalid parameter `text`';
-            console.error(msg);
+            console.error('invalid parameter `text`');
         }
 
+        // update client view
+        const list = Todo.getList();
+        renderSafe(res, todoViewPath, { list });
+    });
+
+    router.post('/remove', function(req, res) {
+        const id = req.body.id;
+
+        if (is(Number, id)) {
+            Todo.remove(id);
+        } else {
+            console.error('invalid `id`');
+        }
+
+        // update client view
         const list = Todo.getList();
         renderSafe(res, todoViewPath, { list });
     });

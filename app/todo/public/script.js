@@ -15,6 +15,7 @@ function TodoController() {
             checkboxClick();
             addButtonClick();
             inputKeyUp();
+            xMarkClick();
         }
     };
 }
@@ -47,8 +48,19 @@ function inputKeyUp() {
     $('#todo-input-add').keyup(function(e) {
         if (e.which === ENTER) {
             $('#todo-button-add').click();
-            $(this).blur();
+            //$(this).blur();
         }
+    });
+}
+
+function xMarkClick() {
+    $('.remove').click(function(e) {
+        var $el = $(e.target);
+        var id = $el.closest('li').data('id');
+
+        console.log('removing element with id', id);
+
+        postJSON('/todo/remove', { id: id }, render, 'html');
     });
 }
 
