@@ -5,3 +5,8 @@ input {
 ul {
   decoration: none;
 }
+
+.remove {
+  float: right;
+  background: red;
+}

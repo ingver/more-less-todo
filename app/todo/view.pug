@@ -4,8 +4,8 @@ mixin todoList
   .col-md-6
     .panel.panel-default
       .panel-heading
-        input.panel-title(placeholder='What do you need to do?')
-        button.btn.btn-primary(type='button') Add
+        input#todo-input-add.panel-title(placeholder='What do you need to do?')
+        button#todo-button-add.btn.btn-primary(type='button') Add
       .panel-body
         .progress
           .progress-bar.progress-bar-success(

@@ -1,7 +1,6 @@
-const { is, type } = require('ramda');
-const TodoModel = require('./model');
-
 function initTodo(app) {
+    const { is, type } = require('ramda');
+    const TodoModel = require('./model');
     const path = require('path');
     const express = require('express');
     const router = express.Router();
@@ -32,6 +31,20 @@ function initTodo(app) {
         }
 
         // update client view
+        const list = Todo.getList();
+        renderSafe(res, todoViewPath, { list });
+    });
+
+    router.post('/add', function(req, res) {
+        const text = req.body.text;
+
+        if (is(String, text)) {
+            Todo.addItem(text);
+        } else {
+            const msg = 'invalid parameter `text`';
+            console.error(msg);
+        }
+
         const list = Todo.getList();
         renderSafe(res, todoViewPath, { list });
     });
