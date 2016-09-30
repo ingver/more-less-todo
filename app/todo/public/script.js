@@ -16,6 +16,7 @@ function TodoController() {
             addButtonClick();
             inputKeyUp();
             xMarkClick();
+            recalcProgress();
         }
     };
 }
@@ -58,8 +59,6 @@ function xMarkClick() {
         var $el = $(e.target);
         var id = $el.closest('li').data('id');
 
-        console.log('removing element with id', id);
-
         postJSON('/todo/remove', { id: id }, render, 'html');
     });
 }
@@ -73,9 +72,28 @@ function render(html) {
     $('#todo-list-container').html(html);
     checkboxClick();
     xMarkClick();
+    recalcProgress();
 }
 
 function ajaxErrorHandler(jqXHR, textStatus, errorThrown) {
     console.error('ajax error');
     console.error(textStatus + ': ' + errorThrown);
+}
+
+function recalcProgress() {
+    var $checks = $('.todo-check'),
+        $progress = $('#todo-progress');
+
+    if ($checks.length === 0) {
+        $progress
+            .prop('value-now', '0')
+            .css('width', '0%');
+    } else {
+        var number = $checks.filter(':checked').length,
+            percent = number / $checks.length * 100;
+
+        $progress
+            .prop('value-now', percent)
+            .css('width', percent + '%');
+    }
 }
