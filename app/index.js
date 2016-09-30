@@ -22,6 +22,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 require('./todo').init(app);
+// redirects to /todo
+app.use('/', function(req, res) {
+    res.redirect('/todo');
+});
+
 
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {
