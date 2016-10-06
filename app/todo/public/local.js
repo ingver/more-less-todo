@@ -3,7 +3,7 @@
 function loadTodos(cntrl) {
     console.log(localStorage);
 
-    cntrl.todos = JSON.parse(localStorage.getItem('todo-list'));
+    cntrl.todos = JSON.parse(localStorage.getItem('todo-list')) || [];
 
     console.log('Loaded todos:');
     cntrl.todos.forEach(function(el, index) {
