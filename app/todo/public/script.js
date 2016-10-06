@@ -12,33 +12,34 @@ $(function() {
 function TodoController() {
     return {
         init: function() {
-            checkboxClick();
-            addButtonClick();
+            // preinstall items
+            //localStorage.setItem('todo-list', JSON.stringify([
+                //{ value: 'First', checked: false },
+                //{ value: 'Second', checked: true }
+            //]));
+            loadTodos(this);
+            addButtonClick(this);
             inputKeyUp();
-            xMarkClick();
-            recalcProgress();
         }
     };
 }
 
-function checkboxClick() {
+function checkboxClick(cntrl) {
     $('.todo-check').click(function(e) {
-        var $el = $(e.target);
-        var id = $el.closest('li').data('id');
-        var checked = $el.prop('checked');
-        var params = { id: id, checked: checked };
+        var id = $(e.target).closest('li').data('id');
+        var checked = !cntrl.todos[id].checked;
 
-        postJSON('/todo/check', params, render, 'html');
+        handleCheck(cntrl, id, checked);
     });
 }
 
-function addButtonClick() {
+function addButtonClick(cntrl) {
     $('#todo-button-add').click(function() {
         var $input = $('#todo-input-add')[0];
         var text = $input.value;
         if (text !== '') {
             var params = { text: text };
-            postJSON('/todo/add', params, render, 'html');
+            addItem(cntrl, text);
             $input.value = '';
         }
     });
@@ -54,30 +55,11 @@ function inputKeyUp() {
     });
 }
 
-function xMarkClick() {
+function xMarkClick(cntrl) {
     $('.remove').click(function(e) {
-        var $el = $(e.target);
-        var id = $el.closest('li').data('id');
-
-        postJSON('/todo/remove', { id: id }, render, 'html');
+        var id = $(e.target).closest('li').data('id');
+        removeItem(cntrl, id);
     });
-}
-
-function postJSON(url, data, cb, type) {
-    $.post(url, JSON.stringify(data), cb, type)
-    .fail(ajaxErrorHandler);
-}
-
-function render(html) {
-    $('#todo-list-container').html(html);
-    checkboxClick();
-    xMarkClick();
-    recalcProgress();
-}
-
-function ajaxErrorHandler(jqXHR, textStatus, errorThrown) {
-    console.error('ajax error');
-    console.error(textStatus + ': ' + errorThrown);
 }
 
 function recalcProgress() {
@@ -87,7 +69,7 @@ function recalcProgress() {
     if ($checks.length === 0) {
         $progress.css('width', '0%');
     } else {
-        var number = $checks.filter(':checked').length,
+        var number = $checks.filter('.glyphicon-check').length,
             percent = number / $checks.length * 100;
 
         $progress.css('width', percent + '%');

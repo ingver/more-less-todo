@@ -1,12 +1,30 @@
-input {
-  width: 200;
-}
-
-ul {
-  decoration: none;
-}
-
 .remove {
   float: right;
-  background: red;
+  /*background: #df5020;*/
+  border-radius: 3px;
+  color: #df5020;
+}
+
+.remove:hover {
+  color: red;
+}
+
+#todo-input-add {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 3px;
+  margin-right: 8px;
+}
+
+.todo-check {
+  float: left;
+  margin-right: 8px;
+}
+
+.checked-item {
+  text-decoration: line-through;
+}
+
+.glyphicon-check {
+  color: #50df20;
 }
