@@ -10,6 +10,11 @@ const app = express();
 
 app.set('env', process.env.NODE_ENV || 'development');
 
+// force SSL
+if (app.get('env') === 'production') {
+    app.use(forceSSL);
+}
+
 // view engine setup
 app.set('views', __dirname);
 app.set('view engine', 'pug');
@@ -59,5 +64,12 @@ if (app.get('env') === 'development') {
     });
 }
 
+// middle-ware for forcing SSL
+function forceSSL(req, res, next) {
+    if(req.headers['x-forwarded-proto'] != 'https') {
+        return res.redirect(['https://', req.get('Host'), req.url].join(''));
+    }
+    return next();
+}
 
 module.exports = app;
