@@ -1,6 +1,5 @@
 .remove {
   float: right;
-  /*background: #df5020;*/
   border-radius: 3px;
   color: #df5020;
 }
@@ -11,7 +10,6 @@
 
 #todo-input-add {
   border: 1px solid #ccc;
-  border-radius: 5px;
   padding: 3px;
   margin-right: 8px;
 }

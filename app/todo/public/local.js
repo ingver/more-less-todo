@@ -47,6 +47,7 @@ function renderList(cntrl) {
     checkboxClick(cntrl);
     xMarkClick(cntrl);
     recalcProgress();
+    setCount(cntrl);
 }
 
 function updateList(cntrl) {
@@ -67,4 +68,8 @@ function addItem(cntrl, text) {
 function removeItem(cntrl, id) {
     cntrl.todos.splice(id, 1);
     updateList(cntrl);
+}
+
+function setCount(cntrl) {
+    $('#count-badge').text(cntrl.todos.length);
 }

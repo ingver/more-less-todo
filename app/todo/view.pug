@@ -1,11 +1,12 @@
 extends ../layout
 
 mixin todoList
-  .col-md-6
+  .col-xs-12.col-sm-8.col-md-6.col-lg-4
     .panel.panel-default
       .panel-heading
-        input#todo-input-add.panel-title(placeholder='What do you need to do?')
-        button#todo-button-add.btn.btn-primary(type='button') Add
+        .input-group
+          input#todo-input-add.form-control(placeholder='What do you need to do?')
+          #todo-button-add.btn.btn-primary.input-group-addon Add
       .panel-body
         .progress
           #todo-progress.progress-bar.progress-bar-success(
@@ -22,7 +23,7 @@ append styles
     link(rel='stylesheet' href='/todo/styles.css')
 
 block content
-  h1 TODO
+  h1.page-header TODO #[span#count-badge.badge 0]
   +todoList
 
 append scripts
