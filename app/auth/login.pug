@@ -1,0 +1,17 @@
+extends ../layout.pug
+
+block content
+  h1.page-header Log In
+  form(action='/login' method='POST')
+    .container-fluid
+      .col-md-4
+        .panel.panel-default
+          .panel-body
+            .form-group
+              label Username
+              input.form-control(name='username')
+            .form-group
+              label Password
+              input.form-control(name='password' type='password')
+
+            button.btn.btn-default(type='submit') GO!

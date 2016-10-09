@@ -1,0 +1,12 @@
+extends layout.pug
+
+block content
+  if user
+    p You've logged in as #[strong= user.name]
+    a(href='/logout') Logout
+  else
+    p You're not logged in
+    a(href='/login') Login
+    br
+    a(href='/todo') Proceed without login
+
