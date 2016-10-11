@@ -34,14 +34,15 @@ app.use(session({
     saveUninitialized: false
 }));
 
-// todo
-require(path.join(__dirname, 'todo')).init(app);
-
 // authentication
 require(path.join(__dirname, 'auth')).init(app);
 
+// todo
+require(path.join(__dirname, 'todo')).init(app);
+
+
 // main page
-app.use('/', function(req, res) {
+app.get('/', function(req, res) {
     res.render(path.join(__dirname, 'main'), {
         user: req.user
     });
