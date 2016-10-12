@@ -5,8 +5,6 @@ const { renderSafe } = require('../utils');
 
 const router = express.Router();
 const Todo = require('./todo-model').create();
-const mainView = compileFile(path.join(__dirname, 'view.pug'));
-const todoView = compileFile(path.join(__dirname, 'todo-list.pug'));
 
 router.get('/',
     ensureLogin('/login'),
@@ -16,6 +14,7 @@ router.get('/',
                 console.error(err);
                 next(err);
             }
+            const mainView = compileFile(path.join(__dirname, 'view.pug'));
             const data = mainView({
                 title: 'More Less Todo (single user)',
                 list,
@@ -63,6 +62,7 @@ function ajaxHandleTodoData(res) {
         if (err) { return ajaxSendError(res, err); }
 
         //console.log('got the results: ', list);
+        const todoView = compileFile(path.join(__dirname, 'todo-list.pug'));
         const data = {
             count: list.length,
             html: todoView({ list })

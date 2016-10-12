@@ -1,6 +1,7 @@
 const passport = require('passport');
 const path = require('path');
 const Strategy = require('passport-local').Strategy;
+const { logReq } = require('../utils');
 
 // single user
 const user = {
@@ -49,15 +50,15 @@ function initAuth(app) {
 
 function setRoutes(app) {
     app.get('/login', function(req, res) {
-        if (req.user) {
-            return res.redirect('/');
+        if (req.isAuthenticated()) {
+            return res.redirect('/u');
         }
         res.render(path.join(__dirname, 'login'));
     });
 
     app.post('/login',
         passport.authenticate('local', {
-            successReturnToOrRedirect: '/',
+            successReturnToOrRedirect: '/u',
             failureRedirect: '/login'
         })
     );

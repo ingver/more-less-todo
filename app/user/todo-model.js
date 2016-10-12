@@ -1,6 +1,6 @@
 const { is } = require('ramda');
 const pg = require('pg');
-const connStr = process.env.DATABASE_URL || 'postgres://localhost:5432/todo';
+const connStr = require('../config').dbConnStr;
 
 function TodoModel() {
 }
@@ -31,7 +31,6 @@ TodoModel.prototype.add = function(text, cb) {
 };
 
 TodoModel.prototype.remove = function(id, cb) {
-    console.log('remove id:', id);
     if (!is(Number, id)) { cb(new Error('id must be a number')); }
 
     pg.connect(connStr, (err, client, done) => {
@@ -46,7 +45,6 @@ TodoModel.prototype.remove = function(id, cb) {
 };
 
 TodoModel.prototype.check = function(id, checked, cb) {
-    console.log('id', id, 'checked', checked);
     if (!is(Number, id)) { cb(new Error('id must be a number')); }
     if (!is(Boolean, checked)) { cb(new Error('checked must be a boolean')); }
 

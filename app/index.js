@@ -1,11 +1,14 @@
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const redisStore = require('connect-redis')(session);
+const { logReq } = require('./utils');
 
+const config = require('./config');
 const app = express();
 
 
@@ -29,7 +32,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
     name: 'more-less-todo-session',
-    secret: process.env.SESSION_SECRET || '8@gwd<hjRh-78_Gs%q`H',
+    store: new redisStore({
+        url: config.redisStore.url
+    }),
+    secret: config.sessionSecret,
     resave: false,
     saveUninitialized: false
 }));
@@ -89,12 +95,6 @@ function forceSSL(req, res, next) {
         return res.redirect(['https://', req.get('Host'), req.url].join(''));
     }
     return next();
-}
-
-function logReq(req, res, next) {
-    //console.log(req.session);
-    //console.log(req.user);
-    next();
 }
 
 module.exports = app;
