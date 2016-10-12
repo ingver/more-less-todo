@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
     name: 'more-less-todo-session',
-    secret: 'BL}4n(iSuN>Cu-_C!9J_',
+    secret: process.env.SESSION_SECRET || '8@gwd<hjRh-78_Gs%q`H',
     resave: false,
     saveUninitialized: false
 }));
@@ -45,7 +45,7 @@ require(path.join(__dirname, 'user')).init(app);
 
 
 // main page
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
     res.render(path.join(__dirname, 'main'), {
         user: req.user
     });
@@ -53,7 +53,7 @@ app.get('/', function(req, res) {
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
@@ -64,7 +64,7 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
     // development error handler
     // will print stacktrace
-    app.use(function(err, req, res, next) {
+    app.use((err, req, res, next) => {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -74,7 +74,7 @@ if (app.get('env') === 'development') {
 } else {
     // production error handler
     // no stacktraces leaked to user
-    app.use(function(err, req, res, next) {
+    app.use((err, req, res, next) => {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -92,8 +92,9 @@ function forceSSL(req, res, next) {
 }
 
 function logReq(req, res, next) {
-    console.log(req.session);
-    console.log(req.user);
+    //console.log(req.session);
+    //console.log(req.user);
+    next();
 }
 
 module.exports = app;

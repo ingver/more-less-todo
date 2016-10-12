@@ -1,6 +1,5 @@
 const path = require('path');
 const express = require('express');
-const { ensureLoggedIn } = require('connect-ensure-login');
 const { renderSafe } = require('../utils');
 
 function initTodo(app) {

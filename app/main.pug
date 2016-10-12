@@ -4,6 +4,8 @@ block content
   if user
     p You've logged in as #[strong= user.name]
     a(href='/logout') Logout
+    br
+    a(href='/u') Go to your TODO list
   else
     p You're not logged in
     a(href='/login') Login

@@ -57,7 +57,7 @@ function setRoutes(app) {
 
     app.post('/login',
         passport.authenticate('local', {
-            successRedirect: '/',
+            successReturnToOrRedirect: '/',
             failureRedirect: '/login'
         })
     );

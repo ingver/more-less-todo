@@ -6,7 +6,7 @@ function TodoModel() {
 }
 
 TodoModel.prototype.getList = function(cb) {
-    pg.connect(connStr, function(err, client, done) {
+    pg.connect(connStr, (err, client, done) => {
         if (err) { done(); cb(err); }
 
         sendAll(client, done, cb);
@@ -18,7 +18,7 @@ TodoModel.prototype.add = function(text, cb) {
         cb(new Error('text must be non-empty string'));
     }
 
-    pg.connect(connStr, function(err, client, done) {
+    pg.connect(connStr, (err, client, done) => {
         if (err) { done(); cb(err); }
 
         client
@@ -34,7 +34,7 @@ TodoModel.prototype.remove = function(id, cb) {
     console.log('remove id:', id);
     if (!is(Number, id)) { cb(new Error('id must be a number')); }
 
-    pg.connect(connStr, function(err, client, done) {
+    pg.connect(connStr, (err, client, done) => {
         if (err) { done(); cb(err); }
 
         client
@@ -50,7 +50,7 @@ TodoModel.prototype.check = function(id, checked, cb) {
     if (!is(Number, id)) { cb(new Error('id must be a number')); }
     if (!is(Boolean, checked)) { cb(new Error('checked must be a boolean')); }
 
-    pg.connect(connStr, function(err, client, done) {
+    pg.connect(connStr, (err, client, done) => {
         if (err) { done(); cb(err); }
 
         client
@@ -65,11 +65,11 @@ TodoModel.prototype.check = function(id, checked, cb) {
 function sendAll(client, done, cb) {
     client
         .query('SELECT * FROM todo_single ORDER BY id ASC')
-        .then(function(data) {
+        .then(data => {
             done();
             cb(null, data.rows);
         })
-        .catch(function(err) {
+        .catch(err => {
             done();
             console.log('error:', err);
         });

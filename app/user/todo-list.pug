@@ -1,0 +1,9 @@
+- checkedClass = 'glyphicon-check checked-box'
+- uncheckedClass = 'glyphicon-unchecked'
+each item, index in list
+  li.list-group-item('data-id'= item.id)
+    span.todo-check.glyphicon(
+      class= item.complete ? checkedClass : uncheckedClass)
+    span.todo-text(class= item.complete ? 'checked-item' : '')
+      = item.text
+    span.remove.glyphicon.glyphicon-remove-sign
