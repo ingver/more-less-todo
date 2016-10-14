@@ -1,5 +1,4 @@
 const app = require('./app');
-const debug = require('debug')('smth-frontend:server');
 const http = require('http');
 
 
@@ -10,7 +9,6 @@ app.set('port', port);
 const server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
-server.on('listening', onListening);
 
 
 function normalizePort(val) {
@@ -47,13 +45,4 @@ function onError(error) {
         default:
             throw error;
     }
-}
-
-
-function onListening() {
-    const addr = server.address();
-    const bind = typeof addr === 'string' ?
-        'pipe ' + addr :
-        'port ' + addr.port;
-    debug('Listening on ' + bind);
 }
