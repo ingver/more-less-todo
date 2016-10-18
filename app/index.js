@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const redisStore = require('connect-redis')(session);
-const { logReq } = require('./utils');
 
 const config = require('./config');
 const app = express();
@@ -29,6 +28,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '..', 'node_modules')));
 
 app.use(session({
     name: 'more-less-todo-session',
@@ -70,7 +70,7 @@ app.use((req, res, next) => {
 if (app.get('env') === 'development') {
     // development error handler
     // will print stacktrace
-    app.use((err, req, res, next) => {
+    app.use((err, req, res) => {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -80,7 +80,7 @@ if (app.get('env') === 'development') {
 } else {
     // production error handler
     // no stacktraces leaked to user
-    app.use((err, req, res, next) => {
+    app.use((err, req, res) => {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,

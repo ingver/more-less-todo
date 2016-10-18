@@ -1,4 +1,4 @@
-extends ../layout
+extends ../layout.pug
 
 mixin todoList
   .col-xs-12.col-sm-8.col-md-6.col-lg-4
@@ -26,6 +26,7 @@ block content
   h1.page-header TODO #[span#count-badge.badge 0]
   +todoList
 
+  a(href='/' style="float: bottom") Back
+
 append scripts
-  script(src='/todo/local.js')
-  script(src='/todo/script.js')
+  script('data-main'='/todo/main' src='/requirejs/require.js')

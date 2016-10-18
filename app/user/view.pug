@@ -1,4 +1,4 @@
-extends ../layout
+extends ../layout.pug
 
 mixin todoList
   .col-xs-12.col-sm-8.col-md-6.col-lg-4
@@ -31,6 +31,5 @@ block content
 
   a(href='/logout' style="float: bottom") Logout
 
-append scripts
-  script(src='/u/server.js')
-  script(src='/u/app.js')
+block scripts
+  script('data-main'='/u/main' src='/requirejs/require.js')

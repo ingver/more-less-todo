@@ -1,7 +1,6 @@
 const path = require('path');
 const express = require('express');
 const { compileFile } = require('pug');
-const { renderSafe } = require('../utils');
 
 const router = express.Router();
 const Todo = require('./todo-model').create();
