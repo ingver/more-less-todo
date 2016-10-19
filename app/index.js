@@ -43,8 +43,8 @@ app.use(session({
 // authentication
 require(path.join(__dirname, 'auth')).init(app);
 
-// todo
-require(path.join(__dirname, 'todo')).init(app);
+// local todo
+require(path.join(__dirname, 'local-todo')).init(app);
 
 // user
 require(path.join(__dirname, 'user')).init(app);

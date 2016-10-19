@@ -20,7 +20,7 @@ mixin todoList
           ul#todo-list.list-group
 
 append styles
-    link(rel='stylesheet' href='/todo/styles.css')
+    link(rel='stylesheet' href='/local-todo/styles.css')
 
 block content
   h1.page-header TODO #[span#count-badge.badge 0]
@@ -29,4 +29,4 @@ block content
   a(href='/' style="float: bottom") Back
 
 append scripts
-  script('data-main'='/todo/main' src='/requirejs/require.js')
+  script('data-main'='/local-todo/main' src='/requirejs/require.js')

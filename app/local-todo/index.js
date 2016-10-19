@@ -7,11 +7,11 @@ function initTodo(app) {
 
     // local todo list
     const title = 'More Less Todo (local)';
-    app.get('/todo', function(req, res) {
+    app.get('/local-todo', function(req, res) {
         renderSafe(res, viewPath, { title });
     });
 
-    app.use('/todo', express.static(path.join(__dirname, 'public')));
+    app.use('/local-todo', express.static(path.join(__dirname, 'public')));
 }
 
 
