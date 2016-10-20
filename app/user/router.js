@@ -3,17 +3,18 @@ const express = require('express');
 const { compileFile } = require('pug');
 
 const router = express.Router();
-const Todo = require('./todo-model').create();
+const Todo = require('./models/todo-list').create();
 
 router.get('/',
     ensureLogin('/login'),
+    //logReq('get /u'),
     (req, res, next) => {
-        Todo.getList((err, list) => {
+        Todo.getList(req.user.id, (err, list) => {
             if (err) {
-                console.error(err);
-                next(err);
+                console.error('get /', err);
+                return next(err);
             }
-            const mainView = compileFile(path.join(__dirname, 'view.pug'));
+            const mainView = compileFile(path.join(__dirname, 'views', 'view.pug'));
             const data = mainView({
                 title: 'More Less Todo (single user)',
                 list,
@@ -25,48 +26,52 @@ router.get('/',
 router.get('/get',
     ajaxEnsureLogin('/login'),
     (req, res) => {
-        Todo.getList(ajaxHandleTodoData(res));
+        Todo.getList(req.user.id, ajaxHandleTodoData(res));
     });
 
 router.post('/check',
     ajaxEnsureLogin('/login'),
     (req, res) => {
         const { id, checked } = req.body;
-        //console.log('id:', id, ', checked', checked);
 
-        Todo.check(id, checked, ajaxHandleTodoData(res));
+        Todo.check(id, checked, req.user.id, ajaxHandleTodoData(res));
     });
 
 router.post('/add',
     ajaxEnsureLogin('/login'),
     (req, res) => {
         const text = req.body.text;
-        //console.log('text', text);
 
-        Todo.add(text, ajaxHandleTodoData(res));
+        Todo.add(text, req.user.id, ajaxHandleTodoData(res));
     });
 
 router.post('/remove',
     ajaxEnsureLogin('/login'),
     (req, res) => {
-        const id = req.body.id;
+        const todoId = req.body.id;
 
-        Todo.remove(id, ajaxHandleTodoData(res));
+        Todo.remove(todoId, req.user.id, ajaxHandleTodoData(res));
     });
 
 router.use(express.static(path.join(__dirname, 'public')));
 
+router.use((err, req, res, next) => {
+    console.error('***/u error***');
+    console.error(err);
+    res.status(500).send('<p>Something broke</p>');
+});
+
 function ajaxHandleTodoData(res) {
     return (err, list) => {
-        if (err) { return ajaxSendError(res, err); }
+        if (err) {
+            return ajaxSendError(res, err);
+        }
 
-        //console.log('got the results: ', list);
-        const todoView = compileFile(path.join(__dirname, 'todo-list.pug'));
+        const todoView = compileFile(path.join(__dirname, 'views', 'todo-list.pug'));
         const data = {
             count: list.length,
             html: todoView({ list })
         };
-        //console.log('data', data);
         res.json(data);
     };
 }

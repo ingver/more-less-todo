@@ -1,45 +1,34 @@
 const passport = require('passport');
 const path = require('path');
 const Strategy = require('passport-local').Strategy;
-const { logReq } = require('../utils');
-
-// single user
-const user = {
-    name: 'foobar',
-    pass: '12345'
-};
-
-function findUser(username, cb) {
-    if (username ===  user.name) {
-        return cb(null, user);
-    }
-
-    return cb(null);
-}
+const User = require('./user').create();
 
 function initAuth(app) {
     passport.use(new Strategy(
-        function(username, password, done) {
-            findUser(username, function(err, user) {
+        (username, password, done) => {
+            User.findByName(username, (err, user) => {
                 if (err) {
                     return done(err);
                 }
+
                 if (!user) {
                     return done(null, false, { message: 'User not found'});
                 }
-                if (user.pass === password) {
+
+                if (user.password === password) {
                     return done(null, user);
                 }
+
                 done(null, false, { message: 'Incorrect username/password'});
             });
         }
     ));
 
-    passport.serializeUser(function(user, cb) {
-        cb(null, user.name);
+    passport.serializeUser((user, cb) => {
+        cb(null, user.id);
     });
-    passport.deserializeUser(function(username, cb) {
-        findUser(username, cb);
+    passport.deserializeUser((id, cb) => {
+        User.findById(id, cb);
     });
 
     app.use(passport.initialize());
@@ -49,7 +38,7 @@ function initAuth(app) {
 }
 
 function setRoutes(app) {
-    app.get('/login', function(req, res) {
+    app.get('/login', (req, res) => {
         if (req.isAuthenticated()) {
             return res.redirect('/u');
         }
@@ -63,7 +52,7 @@ function setRoutes(app) {
         })
     );
 
-    app.get('/logout', function(req, res) {
+    app.get('/logout', (req, res) => {
         req.logout();
         res.redirect('/');
     });

@@ -1,3 +1,5 @@
+const { is } = require('ramda');
+
 exports.renderSafe = (res, path, data) => {
     res.render(path, data, function(err, html) {
         if (err) return console.error(err);
@@ -11,3 +13,5 @@ exports.logReq = msg => (req, res, next) => {
     console.log('req.user', req.user);
     next();
 };
+
+exports.validUserId = id => is(Number, id) && id > 0;
