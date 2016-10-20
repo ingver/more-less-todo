@@ -1,5 +1,4 @@
 const passport = require('passport');
-const path = require('path');
 const Strategy = require('passport-local').Strategy;
 const User = require('./user').create();
 
@@ -34,28 +33,8 @@ function initAuth(app) {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    setRoutes(app);
-}
-
-function setRoutes(app) {
-    app.get('/login', (req, res) => {
-        if (req.isAuthenticated()) {
-            return res.redirect('/u');
-        }
-        res.render(path.join(__dirname, 'login'));
-    });
-
-    app.post('/login',
-        passport.authenticate('local', {
-            successReturnToOrRedirect: '/u',
-            failureRedirect: '/login'
-        })
-    );
-
-    app.get('/logout', (req, res) => {
-        req.logout();
-        res.redirect('/');
-    });
+    require('./login').init(app);
+    require('./register').init(app);
 }
 
 exports.init = initAuth;
