@@ -16,7 +16,7 @@ router.get('/',
             }
             const mainView = compileFile(path.join(__dirname, 'views', 'view.pug'));
             const data = mainView({
-                title: 'More Less Todo (single user)',
+                title: 'More Less Todo',
                 list,
             });
             res.send(data);
