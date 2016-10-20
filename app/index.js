@@ -47,7 +47,7 @@ require(path.join(__dirname, 'auth')).init(app);
 require(path.join(__dirname, 'local-todo')).init(app);
 
 // user
-require(path.join(__dirname, 'user')).init(app);
+require(path.join(__dirname, 'user-todo')).init(app);
 
 
 // main page
