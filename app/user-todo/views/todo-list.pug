@@ -1,9 +1,13 @@
 - checkedClass = 'glyphicon-check checked-box'
 - uncheckedClass = 'glyphicon-unchecked'
 each item, index in list
-  li.list-group-item('data-id'= item.id)
-    span.todo-check.glyphicon(
-      class= item.complete ? checkedClass : uncheckedClass)
-    span.todo-text(class= item.complete ? 'checked-item' : '')
-      = item.text
-    span.remove.glyphicon.glyphicon-remove-sign
+  .row.list-group-item.todo-item('data-id'= item.id)
+    .col-xs-1
+      span.todo-check.glyphicon(
+        class= item.complete ? checkedClass : uncheckedClass)
+    .col-xs-8.col-sm-9.col-md-9.col-lg-9.word-break-constraint
+      span.todo-text(class= item.complete ? 'checked-item' : '')
+        = item.text
+    .col-xs-1
+    .col-xs-1.remove-sign-wrapper
+      span.remove.glyphicon.glyphicon-remove-sign

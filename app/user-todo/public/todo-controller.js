@@ -58,10 +58,13 @@ define(['jquery', './utils'], function($, utils) {
                     //console.log(context + ' :: received data:', data);
                     //console.log('procResponse this:', this);
                     if ('redirect' in data) {
+                        console.log('got redirecting');
                         window.location.replace(data.redirect);
                     } else if ('error' in data) {
+                        console.log('got error');
                         console.error(data.error);
                     } else if ('html' in data && 'count' in data) {
+                        console.log('got data', data);
                         this.todos = data.html;
                         this.count = data.count;
                         this.renderList();
@@ -73,9 +76,9 @@ define(['jquery', './utils'], function($, utils) {
 
             renderList: function() {
                 //console.log('renderList()...');
-                var $ul = $('#todo-list').empty();
+                var $todoList = $('#todo-list-container').empty();
 
-                $ul.html(this.todos);
+                $todoList.html(this.todos);
 
                 this.checkboxClick();
                 this.xMarkClick();
@@ -93,7 +96,7 @@ define(['jquery', './utils'], function($, utils) {
 
             handleCheck: function($checkbox) {
                 //console.log('handleCheck()...');
-                var id = $checkbox.closest('li').data('id');
+                var id = $checkbox.closest('.todo-item').data('id');
                 var checked = !$checkbox.hasClass('checked-box');
                 //console.log('checked', checked);
                 utils.postJSON(
@@ -108,7 +111,7 @@ define(['jquery', './utils'], function($, utils) {
                 var self = this;
                 $('.remove').click(function(e) {
                     //console.log('xMarkClick self:', self);
-                    var id = $(e.target).closest('li').data('id');
+                    var id = $(e.target).closest('.todo-item').data('id');
                     self.removeItem(id);
                 });
             },

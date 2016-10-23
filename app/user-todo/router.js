@@ -49,6 +49,7 @@ router.post('/remove',
     ajaxEnsureLogin('/login'),
     (req, res) => {
         const todoId = req.body.id;
+        console.log('todoId', todoId);
 
         Todo.remove(todoId, req.user.id, ajaxHandleTodoData(res));
     });

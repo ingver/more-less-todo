@@ -1,3 +1,7 @@
+.word-break-constraint {
+  word-break:break-all;
+}
+
 .remove {
   float: right;
   border-radius: 3px;

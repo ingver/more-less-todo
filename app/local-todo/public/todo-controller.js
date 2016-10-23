@@ -31,34 +31,51 @@ define(['jquery'], function($) {
             },
 
             renderList: function() {
-                var $ul = $('#todo-list').empty(),
+                var $todoList = $('#todo-list-container').empty(),
                     checkedClass = 'glyphicon-check',
                     uncheckedClass = 'glyphicon-unchecked';
 
                 this.todos.forEach(function(el, index) {
-                    var $li = $('<li/>', {
-                            'class': 'list-group-item',
+                    var $item = $('<div>', {
+                            'class': 'row list-group-item todo-item',
                             'data-id': index
                         });
 
+                    var $checkWrapper = $('<div>', {
+                        'class': 'col-xs-1'
+                    });
                     var $check = $('<span>', {
                             'class': 'todo-check glyphicon'
                         })
                         .addClass(el.checked ? checkedClass : uncheckedClass);
+                    $checkWrapper.append($check);
 
+                    var $textWrapper = $('<div>', {
+                        'class': 'col-xs-8 col-sm-9 col-md-9 col-lg-9 word-break-constraint'
+                    });
                     var $text = $('<span>', {
                             'class': 'todo-text' + (el.checked ? ' checked-item' : ''),
                             text: el.value
                         });
+                    $textWrapper.append($text);
 
+                    var $spacer = $('<div>', {
+                        'class': 'col-xs-1'
+                    });
+
+                    var $xWrapper = $('<div>', {
+                        'class': 'col-xs-1 remove-sign-wrapper'
+                    });
                     var $x = $('<span>', {
                             'class': 'remove glyphicon glyphicon-remove-sign'
                         });
+                    $xWrapper.append($x);
 
-                    $li.append($check)
-                       .append($text)
-                       .append($x)
-                       .appendTo($ul);
+                    $item.append($checkWrapper)
+                        .append($textWrapper)
+                        .append($xWrapper)
+                        .append($spacer)
+                        .appendTo($todoList);
                 });
 
                 this.checkboxClick();
@@ -97,7 +114,7 @@ define(['jquery'], function($) {
             checkboxClick: function() {
                 var self = this;
                 $('.todo-check').click(function(e) {
-                    var id = $(e.target).closest('li').data('id');
+                    var id = $(e.target).closest('.todo-item').data('id');
                     var checked = !self.todos[id].checked;
 
                     self.handleCheck(id, checked);
@@ -107,7 +124,7 @@ define(['jquery'], function($) {
             xMarkClick: function() {
                 var self = this;
                 $('.remove').click(function(e) {
-                    var id = $(e.target).closest('li').data('id');
+                    var id = $(e.target).closest('.todo-item').data('id');
                     self.removeItem(id);
                 });
             },
