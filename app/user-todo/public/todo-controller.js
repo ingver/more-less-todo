@@ -7,7 +7,7 @@ define(['jquery', './utils'], function($, utils) {
 
         return {
             init: function() {
-                //console.log('init()...');
+                console.log('init()...');
                 this.loadTodos();
                 this.addButtonClick();
                 this.inputKeyUp();
