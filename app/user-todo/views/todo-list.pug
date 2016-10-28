@@ -1,7 +1,10 @@
 - checkedClass = 'glyphicon-check checked-box'
 - uncheckedClass = 'glyphicon-unchecked'
 each item, index in list
-  .row.list-group-item.todo-item('data-id'= item.id)
+  .row.list-group-item.todo-item(
+    'data-id'= item.id
+    'data-complete'= item.complete
+    )
     .col-xs-1
       span.todo-check.glyphicon(
         class= item.complete ? checkedClass : uncheckedClass)

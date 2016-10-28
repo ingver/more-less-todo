@@ -75,10 +75,11 @@ function ajaxHandleTodoData(res) {
             return ajaxSendError(res, err);
         }
 
-        const todoView = compileFile(path.join(__dirname, 'views', 'todo-list.pug'));
+        //const todoView = compileFile(path.join(__dirname, 'views', 'todo-list.pug'));
         const data = {
-            count: list.length,
-            html: todoView({ list })
+            //count: list.length,
+            //html: todoView({ list })
+            list
         };
         res.json(data);
     };

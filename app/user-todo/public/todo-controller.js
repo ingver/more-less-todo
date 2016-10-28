@@ -9,6 +9,12 @@ define(['jquery', './utils'], function($, utils) {
             init: function() {
                 console.log('init()...');
                 this.loadTodos();
+
+                this.checkboxClick();
+                this.xMarkClick();
+                this.recalcProgress();
+                this.setCount();
+
                 this.addButtonClick();
                 this.inputKeyUp();
             },
@@ -63,10 +69,10 @@ define(['jquery', './utils'], function($, utils) {
                     } else if ('error' in data) {
                         console.log('got error');
                         console.error(data.error);
-                    } else if ('html' in data && 'count' in data) {
+                    } else if ('list' in data/* && 'count' in data*/) {
                         console.log('got data', data);
-                        this.todos = data.html;
-                        this.count = data.count;
+                        this.todos = data.list;
+                        this.count = this.todos.length;
                         this.renderList();
                     } else {
                         console.error('Bad response');
@@ -75,10 +81,54 @@ define(['jquery', './utils'], function($, utils) {
             },
 
             renderList: function() {
-                //console.log('renderList()...');
-                var $todoList = $('#todo-list-container').empty();
+                console.log('renderList()...');
+                var $todoList = $('#todo-list-container').empty(),
+                    checkedClass = 'glyphicon-check',
+                    uncheckedClass = 'glyphicon-unchecked';
 
-                $todoList.html(this.todos);
+                this.todos.forEach(function(el) {
+                    var $item = $('<div>', {
+                            'class': 'row list-group-item todo-item',
+                            'data-id': el.id,
+                            'data-complete': el.complete
+                        });
+
+                    var $checkWrapper = $('<div>', {
+                        'class': 'col-xs-1'
+                    });
+                    var $check = $('<span>', {
+                            'class': 'todo-check glyphicon'
+                        })
+                        .addClass(el.complete ? checkedClass : uncheckedClass);
+                    $checkWrapper.append($check);
+
+                    var $textWrapper = $('<div>', {
+                        'class': 'col-xs-8 col-sm-9 col-md-9 col-lg-9 word-break-constraint'
+                    });
+                    var $text = $('<span>', {
+                            'class': 'todo-text' + (el.complete ? ' checked-item' : ''),
+                            text: el.text
+                        });
+                    $textWrapper.append($text);
+
+                    var $spacer = $('<div>', {
+                        'class': 'col-xs-1'
+                    });
+
+                    var $xWrapper = $('<div>', {
+                        'class': 'col-xs-1 remove-sign-wrapper'
+                    });
+                    var $x = $('<span>', {
+                            'class': 'remove glyphicon glyphicon-remove-sign'
+                        });
+                    $xWrapper.append($x);
+
+                    $item.append($checkWrapper)
+                        .append($textWrapper)
+                        .append($xWrapper)
+                        .append($spacer)
+                        .appendTo($todoList);
+                });
 
                 this.checkboxClick();
                 this.xMarkClick();
@@ -96,9 +146,10 @@ define(['jquery', './utils'], function($, utils) {
 
             handleCheck: function($checkbox) {
                 //console.log('handleCheck()...');
-                var id = $checkbox.closest('.todo-item').data('id');
-                var checked = !$checkbox.hasClass('checked-box');
-                //console.log('checked', checked);
+                var $item = $checkbox.closest('.todo-item');
+                var id = $item.data('id');
+                var checked = !$item.data('complete');
+                console.log('id', id, 'checked', checked);
                 utils.postJSON(
                     '/u/check',
                     { id: id, checked: checked },
@@ -112,6 +163,7 @@ define(['jquery', './utils'], function($, utils) {
                 $('.remove').click(function(e) {
                     //console.log('xMarkClick self:', self);
                     var id = $(e.target).closest('.todo-item').data('id');
+                    console.log('id', id);
                     self.removeItem(id);
                 });
             },
