@@ -7,8 +7,7 @@ define(['jquery', './utils'], function($, utils) {
 
         return {
             init: function() {
-                console.log('init()...');
-                console.log('template', window.todoListTemplate);
+                //console.log('init()...');
                 this.loadTodos();
 
                 this.checkboxClick();
@@ -63,7 +62,6 @@ define(['jquery', './utils'], function($, utils) {
             procResponse: function(/*context*/) {
                 return (function(data) {
                     //console.log(context + ' :: received data:', data);
-                    //console.log('procResponse this:', this);
                     if ('redirect' in data) {
                         console.log('got redirecting');
                         window.location.replace(data.redirect);
@@ -82,7 +80,7 @@ define(['jquery', './utils'], function($, utils) {
             },
 
             renderList: function() {
-                console.log('renderList()...');
+                //console.log('renderList()...');
                 var $todoList = $('#todo-list-container').empty(),
                     html = window.todoListTemplate({ list: this.todos });
                 $todoList.html(html);
@@ -105,11 +103,10 @@ define(['jquery', './utils'], function($, utils) {
                 //console.log('handleCheck()...');
                 var $item = $checkbox.closest('.todo-item');
                 var id = $item.data('id');
-                var checked = !$item.data('complete');
-                console.log('id', id, 'checked', checked);
+                var complete = !$item.data('complete');
                 utils.postJSON(
                     '/u/check',
-                    { id: id, checked: checked },
+                    { id: id, complete: complete },
                     this.procResponse('handleCheck'),
                     'json');
             },
@@ -120,7 +117,6 @@ define(['jquery', './utils'], function($, utils) {
                 $('.remove').click(function(e) {
                     //console.log('xMarkClick self:', self);
                     var id = $(e.target).closest('.todo-item').data('id');
-                    console.log('id', id);
                     self.removeItem(id);
                 });
             },

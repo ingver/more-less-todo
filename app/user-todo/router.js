@@ -33,9 +33,9 @@ router.get('/get',
 router.post('/check',
     ajaxEnsureLogin('/login'),
     (req, res) => {
-        const { id, checked } = req.body;
+        const { id, complete } = req.body;
 
-        Todo.check(id, checked, req.user.id, ajaxHandleTodoData(res));
+        Todo.check(id, complete, req.user.id, ajaxHandleTodoData(res));
     });
 
 router.post('/add',
