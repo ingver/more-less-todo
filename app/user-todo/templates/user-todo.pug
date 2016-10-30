@@ -1,4 +1,4 @@
-extends ../../layout.pug
+extends ../../common/templates/layout.pug
 
 mixin todoList
   .col-xs-12.col-sm-8.col-md-6.col-lg-4
@@ -18,8 +18,6 @@ mixin todoList
             style='width: 0%')
 
         #todo-list-container.list-group
-          //-ul#todo-list.list-group
-          include todo-list
 
 append styles
     link(rel='stylesheet' href='/u/styles.css')
@@ -30,5 +28,6 @@ block content
 
   a(href='/logout' style="float: bottom") Logout
 
-block scripts
+append scripts
+  script(src='/templates/todo-list-tmpl.js')
   script('data-main'='/u/main' src='/requirejs/require.js')

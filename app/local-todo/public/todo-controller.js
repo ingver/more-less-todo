@@ -1,4 +1,4 @@
-/* globals define, localStorage */
+/* globals define, localStorage, window */
 'use strict';
 
 define(['jquery'], function($) {
@@ -7,76 +7,20 @@ define(['jquery'], function($) {
 
         return {
             init: function() {
-                // preinstall items
-                //localStorage.setItem('todo-list', JSON.stringify([
-                    //{ value: 'First', checked: false },
-                    //{ value: 'Second', checked: true }
-                //]));
                 this.loadTodos();
                 this.addButtonClick();
                 this.inputKeyUp();
             },
 
             loadTodos: function() {
-                console.log(localStorage);
-
                 this.todos = JSON.parse(localStorage.getItem('todo-list')) || [];
-
-                console.log('Loaded todos:');
-                this.todos.forEach(function(el, index) {
-                    console.log(index, el);
-                });
-
                 this.renderList();
             },
 
             renderList: function() {
                 var $todoList = $('#todo-list-container').empty(),
-                    checkedClass = 'glyphicon-check',
-                    uncheckedClass = 'glyphicon-unchecked';
-
-                this.todos.forEach(function(el, index) {
-                    var $item = $('<div>', {
-                            'class': 'row list-group-item todo-item',
-                            'data-id': index
-                        });
-
-                    var $checkWrapper = $('<div>', {
-                        'class': 'col-xs-1'
-                    });
-                    var $check = $('<span>', {
-                            'class': 'todo-check glyphicon'
-                        })
-                        .addClass(el.checked ? checkedClass : uncheckedClass);
-                    $checkWrapper.append($check);
-
-                    var $textWrapper = $('<div>', {
-                        'class': 'col-xs-8 col-sm-9 col-md-9 col-lg-9 word-break-constraint'
-                    });
-                    var $text = $('<span>', {
-                            'class': 'todo-text' + (el.checked ? ' checked-item' : ''),
-                            text: el.value
-                        });
-                    $textWrapper.append($text);
-
-                    var $spacer = $('<div>', {
-                        'class': 'col-xs-1'
-                    });
-
-                    var $xWrapper = $('<div>', {
-                        'class': 'col-xs-1 remove-sign-wrapper'
-                    });
-                    var $x = $('<span>', {
-                            'class': 'remove glyphicon glyphicon-remove-sign'
-                        });
-                    $xWrapper.append($x);
-
-                    $item.append($checkWrapper)
-                        .append($textWrapper)
-                        .append($xWrapper)
-                        .append($spacer)
-                        .appendTo($todoList);
-                });
+                    html = window.todoListTemplate({ list: this.todos });
+                $todoList.html(html);
 
                 this.checkboxClick();
                 this.xMarkClick();
@@ -97,7 +41,10 @@ define(['jquery'], function($) {
             },
 
             addItem: function(text) {
-                this.todos.push({ value: text, checked: false });
+                this.todos.push({
+                  text: text,
+                  complete: false
+                });
                 this.updateList();
             },
 
@@ -115,9 +62,9 @@ define(['jquery'], function($) {
                 var self = this;
                 $('.todo-check').click(function(e) {
                     var id = $(e.target).closest('.todo-item').data('id');
-                    var checked = !self.todos[id].checked;
+                    var complete = !self.todos[id].complete;
 
-                    self.handleCheck(id, checked);
+                    self.handleCheck(id, complete);
                 });
             },
 
@@ -144,12 +91,15 @@ define(['jquery'], function($) {
             },
 
             updateList: function() {
+                this.todos.forEach(function(el, index) {
+                    el.id = index;
+                });
                 localStorage.setItem('todo-list', JSON.stringify(this.todos));
                 this.renderList();
             },
 
-            handleCheck: function(id, checked) {
-                this.todos[id].checked = checked;
+            handleCheck: function(id, complete) {
+                this.todos[id].complete = complete;
                 this.updateList();
             },
 

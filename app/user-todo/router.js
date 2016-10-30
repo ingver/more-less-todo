@@ -14,8 +14,9 @@ router.get('/',
                 console.error('get /', err);
                 return next(err);
             }
-            const mainView = compileFile(path.join(__dirname, 'views', 'view.pug'));
-            const data = mainView({
+            const mainTemplate = compileFile(
+                path.join(__dirname, 'templates', 'user-todo.pug'));
+            const data = mainTemplate({
                 title: 'More Less Todo',
                 list,
             });
@@ -75,13 +76,7 @@ function ajaxHandleTodoData(res) {
             return ajaxSendError(res, err);
         }
 
-        //const todoView = compileFile(path.join(__dirname, 'views', 'todo-list.pug'));
-        const data = {
-            //count: list.length,
-            //html: todoView({ list })
-            list
-        };
-        res.json(data);
+        res.json({ list });
     };
 }
 

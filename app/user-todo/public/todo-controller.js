@@ -8,6 +8,7 @@ define(['jquery', './utils'], function($, utils) {
         return {
             init: function() {
                 console.log('init()...');
+                console.log('template', window.todoListTemplate);
                 this.loadTodos();
 
                 this.checkboxClick();
@@ -83,52 +84,8 @@ define(['jquery', './utils'], function($, utils) {
             renderList: function() {
                 console.log('renderList()...');
                 var $todoList = $('#todo-list-container').empty(),
-                    checkedClass = 'glyphicon-check',
-                    uncheckedClass = 'glyphicon-unchecked';
-
-                this.todos.forEach(function(el) {
-                    var $item = $('<div>', {
-                            'class': 'row list-group-item todo-item',
-                            'data-id': el.id,
-                            'data-complete': el.complete
-                        });
-
-                    var $checkWrapper = $('<div>', {
-                        'class': 'col-xs-1'
-                    });
-                    var $check = $('<span>', {
-                            'class': 'todo-check glyphicon'
-                        })
-                        .addClass(el.complete ? checkedClass : uncheckedClass);
-                    $checkWrapper.append($check);
-
-                    var $textWrapper = $('<div>', {
-                        'class': 'col-xs-8 col-sm-9 col-md-9 col-lg-9 word-break-constraint'
-                    });
-                    var $text = $('<span>', {
-                            'class': 'todo-text' + (el.complete ? ' checked-item' : ''),
-                            text: el.text
-                        });
-                    $textWrapper.append($text);
-
-                    var $spacer = $('<div>', {
-                        'class': 'col-xs-1'
-                    });
-
-                    var $xWrapper = $('<div>', {
-                        'class': 'col-xs-1 remove-sign-wrapper'
-                    });
-                    var $x = $('<span>', {
-                            'class': 'remove glyphicon glyphicon-remove-sign'
-                        });
-                    $xWrapper.append($x);
-
-                    $item.append($checkWrapper)
-                        .append($textWrapper)
-                        .append($xWrapper)
-                        .append($spacer)
-                        .appendTo($todoList);
-                });
+                    html = window.todoListTemplate({ list: this.todos });
+                $todoList.html(html);
 
                 this.checkboxClick();
                 this.xMarkClick();

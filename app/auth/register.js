@@ -9,7 +9,7 @@ exports.init = app => {
         if (req.isAuthenticated()) {
             return res.redirect('/u');
         }
-        res.render(path.join(__dirname, 'register'));
+        res.render(path.join(__dirname, 'templates', 'register'));
     });
 
     app.post('/register', (req, res) => {

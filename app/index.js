@@ -10,6 +10,9 @@ const redisStore = require('connect-redis')(session);
 const config = require('./config');
 const app = express();
 
+const commonPath = path.join(__dirname, 'common');
+const templatesPath = path.join(commonPath, 'templates');
+const publicPath = path.join(commonPath, 'public');
 
 app.set('env', process.env.NODE_ENV || 'development');
 
@@ -22,12 +25,12 @@ if (app.get('env') === 'production') {
 app.set('views', __dirname);
 app.set('view engine', 'pug');
 
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(publicPath, 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(publicPath)));
 app.use(express.static(path.join(__dirname, '..', 'node_modules')));
 
 app.use(session({
@@ -52,7 +55,7 @@ require(path.join(__dirname, 'user-todo')).init(app);
 
 // main page
 app.get('/', (req, res) => {
-    res.render(path.join(__dirname, 'main'), {
+    res.render(path.join(templatesPath, 'main'), {
         user: req.user
     });
 });
@@ -72,7 +75,7 @@ if (app.get('env') === 'development') {
     // will print stacktrace
     app.use((err, req, res) => {
         res.status(err.status || 500);
-        res.render('error', {
+        res.render(path.join(templatesPath, 'error'), {
             message: err.message,
             error: err
         });
@@ -82,7 +85,7 @@ if (app.get('env') === 'development') {
     // no stacktraces leaked to user
     app.use((err, req, res) => {
         res.status(err.status || 500);
-        res.render('error', {
+        res.render(path.join(templatesPath, 'error'), {
             message: err.message,
             error: {}
         });
