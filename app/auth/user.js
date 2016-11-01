@@ -1,5 +1,5 @@
-const pg = require('pg');
-const { is } = require('ramda');
+const pg              = require('pg');
+const { is }          = require('ramda');
 const { validUserId } = require('../common/utils');
 
 const connStr = require('../config').dbConnStr;

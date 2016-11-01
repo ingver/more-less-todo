@@ -1,5 +1,5 @@
-const pg = new require('pg');
-const { is } = require('ramda');
+const pg              = new require('pg');
+const { is }          = require('ramda');
 const { validUserId } = require('../../common/utils');
 
 const connStr = require('../../config').dbConnStr;
@@ -26,7 +26,7 @@ TodoModel.prototype.add = function(text, userId, cb) {
   }
 
   invokeQuery('INSERT INTO todos(text, user_id) VALUES ($1, $2)',
-    [text, userId], userId, cb);
+              [text, userId], userId, cb);
 };
 
 TodoModel.prototype.remove = function(todoId, userId, cb) {
@@ -37,7 +37,7 @@ TodoModel.prototype.remove = function(todoId, userId, cb) {
   }
 
   invokeQuery('DELETE FROM todos WHERE id = $1',
-    [todoId], userId, cb);
+              [todoId], userId, cb);
 };
 
 TodoModel.prototype.check = function(todoId, checked, userId, cb) {
@@ -50,7 +50,7 @@ TodoModel.prototype.check = function(todoId, checked, userId, cb) {
   }
 
   invokeQuery('UPDATE todos SET complete = $1 WHERE id = $2',
-    [checked, todoId], userId, cb);
+              [checked, todoId], userId, cb);
 };
 
 TodoModel.prototype.edit = function(todoId, text, userId, cb) {
@@ -63,7 +63,7 @@ TodoModel.prototype.edit = function(todoId, text, userId, cb) {
   }
 
   invokeQuery('UPDATE todos SET text = $1 WHERE id = $2',
-    [text, todoId], userId, cb);
+              [text, todoId], userId, cb);
 };
 
 function invokeQuery(query, params, userId, cb) {
@@ -82,7 +82,7 @@ function invokeQuery(query, params, userId, cb) {
 function sendAll(client, userId, done, cb) {
 
   client.query('SELECT * FROM todos WHERE user_id = $1 ORDER BY id ASC',
-    [userId])
+               [userId])
     .then(data => {
       done();
       cb(null, data.rows);

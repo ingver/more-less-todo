@@ -1,9 +1,9 @@
-const path = require('path');
-const express = require('express');
+const path            = require('path');
+const express         = require('express');
 const { compileFile } = require('pug');
 
 const router = express.Router();
-const Todo = require('./models/todo-list').create();
+const Todo   = require('./models/todo-list').create();
 
 router.get('/',
   ensureLogin('/login'),

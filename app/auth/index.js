@@ -1,6 +1,6 @@
 const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
-const User = require('./user').create();
+const User     = require('./user').create();
 
 function initAuth(app) {
   passport.use(new Strategy(

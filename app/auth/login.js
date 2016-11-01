@@ -1,4 +1,4 @@
-const path = require('path');
+const path     = require('path');
 const passport = require('passport');
 
 const templatesPath = path.join(__dirname, 'templates');

@@ -1,18 +1,18 @@
-const path = require('path');
-const express = require('express');
-const favicon = require('serve-favicon');
-const logger = require('morgan');
+const path         = require('path');
+const express      = require('express');
+const favicon      = require('serve-favicon');
+const logger       = require('morgan');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const redisStore = require('connect-redis')(session);
+const bodyParser   = require('body-parser');
+const session      = require('express-session');
+const redisStore   = require('connect-redis')(session);
 
 const config = require('./config');
-const app = express();
+const app    = express();
 
-const commonPath = path.join(__dirname, 'common');
+const commonPath    = path.join(__dirname, 'common');
 const templatesPath = path.join(commonPath, 'templates');
-const publicPath = path.join(commonPath, 'public');
+const publicPath    = path.join(commonPath, 'public');
 
 app.set('env', process.env.NODE_ENV || 'development');
 

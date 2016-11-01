@@ -1,6 +1,6 @@
-const path = require('path');
+const path     = require('path');
 const passport = require('passport');
-const pg = require('pg');
+const pg       = require('pg');
 
 const connStr = require('../config').dbConnStr;
 
@@ -24,8 +24,8 @@ exports.init = app => {
       }
 
       client.query(`INSERT INTO users(name, email, password)
-                          VALUES ($1, $2, $3)`,
-        [username, email, password])
+                    VALUES ($1, $2, $3)`,
+                   [username, email, password])
         .then(() => {
           console.log('success');
           done();
