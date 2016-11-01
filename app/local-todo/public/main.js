@@ -3,15 +3,15 @@
 
 require(['/scripts/thirdparties.js'], function() {
 
-    require(['jquery', './todo-controller'], function($, TodoController) {
+  require(['jquery', './todo-controller'], function($, TodoController) {
 
-        $(function() {
-            $.ajaxSetup({
-                contentType: 'application/json'
-            });
+    $(function() {
+      $.ajaxSetup({
+        contentType: 'application/json'
+      });
 
-            var controller = TodoController();
-            controller.init();
-        });
+      var controller = TodoController();
+      controller.init();
     });
+  });
 });

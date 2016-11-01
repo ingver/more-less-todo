@@ -1,7 +1,7 @@
 function initUser(app) {
-    const router = require('./router');
+  const router = require('./router');
 
-    app.use('/u', router);
+  app.use('/u', router);
 }
 
 module.exports.init = initUser;
