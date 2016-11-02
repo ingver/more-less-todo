@@ -17,7 +17,8 @@ mixin todoList
             aria-valuemax='100'
             style='width: 0%')
 
-        #todo-list-container.list-group
+        #todo-list
+          todo-list('v-bind:list'='list')
 
 append styles
     link(rel='stylesheet' href='/local-todo/styles.css')
@@ -29,5 +30,5 @@ block content
   a(href='/' style="float: bottom") Back
 
 append scripts
-  script(src='/templates/todo-list.tmpl.js')
+  //-script(src='/templates/todo-list.tmpl.js')
   script('data-main'='/local-todo/main' src='/requirejs/require.js')

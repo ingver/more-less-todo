@@ -6,6 +6,7 @@ require.config({
   },
   paths: {
     jquery: 'https://code.jquery.com/jquery-3.1.1.min',
-    bootstrap: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min'
+    bootstrap: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min',
+    vue: 'https://unpkg.com/vue@2.0.3/dist/vue'
   }
 });
