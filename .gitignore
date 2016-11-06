@@ -4,3 +4,5 @@ npm-debug.log
 *.tmpl.js
 **/.tern*
 **/bundle.js
+**/*.map
+**/*.bk

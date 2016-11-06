@@ -31,6 +31,7 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "vue": "^2.0.5",
+    "vue-resource": "^1.0.3",
     "vueify": "^9.2.4"
   },
   "engines": {
@@ -39,6 +40,7 @@
   "devDependencies": {
     "browserify-hmr": "^0.3.5",
     "gulp-nodemon": "^2.2.1",
+    "gulp-sourcemaps": "^2.2.0",
     "watchify": "^3.7.0"
   }
 }
