@@ -1,32 +1,9 @@
 extends ../../common/templates/layout.pug
 
-mixin todoList
-  .col-xs-12.col-sm-8.col-md-6.col-lg-4
-    .panel.panel-default
-      .panel-heading
-        .input-group
-          input#todo-input-add.form-control(
-            placeholder='What do you need to do?')
-          #todo-button-add.btn.btn-primary.input-group-addon Add
-      .panel-body
-        .progress
-          #todo-progress.progress-bar.progress-bar-success(
-            role='progressbar'
-            aria-valuenow='0'
-            aria-valuemin='0'
-            aria-valuemax='100'
-            style='width: 0%')
-
-        #todo-list
-
-append styles
-    link(rel='stylesheet' href='/local-todo/styles.css')
-
 block content
-  h1.page-header TODO #[span#count-badge.badge 0]
-  +todoList
 
-  a(href='/' style="float: bottom") Back
+  #todo-list
+
 
 append scripts
   script(src='/local-todo/bundle.js')

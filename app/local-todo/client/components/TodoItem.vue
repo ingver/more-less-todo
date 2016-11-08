@@ -1,12 +1,12 @@
 <template lang="pug">
 
-.row.list-group-item.todo-item
+.row.list-group-item
   .col-xs-1
     span.todo-check.glyphicon(
       ':class' = 'checked'
       @click   = 'check')
 
-  .col-xs-8.col-sm-9.col-md-9.col-lg-9.word-break-constraint
+  .col-xs-8.col-sm-9.col-md-9.col-lg-9
     input(
       v-autofocus  = ''
       v-if         = 'editable'
@@ -15,7 +15,7 @@
       @keyup.enter = 'endEdit'
       @blur        = 'cancelEdit'
       multiline)
-    span.todo-text(
+    span.todo-text.word-break-constraint(
       v-if     = '!editable'
       ':class' = '{ "checked-item-text": complete }'
       @click   = 'edit')
@@ -103,5 +103,33 @@ export default {
 .checked-item-text {
   text-decoration: line-through;
 };
+
+.word-break-constraint {
+  word-break: break-all;
+}
+
+.remove {
+  float: right;
+  border-radius: 3px;
+  color: #df5020;
+}
+
+.remove:hover {
+  color: red;
+}
+
+.todo-check {
+  float: left;
+  margin-right: 8px;
+}
+
+.glyphicon-check {
+  color: #50df20;
+}
+
+.list-group-item {
+  border-left: 0px;
+  border-right: 0px;
+}
 
 </style>

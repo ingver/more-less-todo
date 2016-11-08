@@ -20,6 +20,7 @@ const paths = {
   localTodoDest: './app/local-todo/public'
 };
 
+const errorLog = (msg, err) => $.util.log(msg, $.util.colors.red(err.message));
 
 /*
  * make a bundler
@@ -33,7 +34,9 @@ gulp.task('browserify', () => {
     packageCache: {}
   })
     .transform(vueify)
-    .transform(babelify);
+    .on('error', err => errorLog('Vueify Error', err))
+    .transform(babelify)
+    .on('error', err => errorLog('Babelify Error', err));
 });
 
 /*
@@ -78,11 +81,12 @@ gulp.task('watch', ['browser-sync', 'serve']);
 
 function bundle() {
   bundler.bundle()
-    .on('error', err => {
-      $.util.log('Browserify Error', $.util.colors.red(err.message));
-    })
+    .on('error', err => errorLog('Browserify Error', err))
     .pipe(source(paths.localTodoDestName))
     .pipe(buffer())
+    .pipe($.sourcemaps.init({loadMaps: true}))
     .pipe($.uglify())
+    .on('error', $.util.log)
+    .pipe($.sourcemaps.write('./'))
     .pipe(gulp.dest(paths.localTodoDest));
 }
