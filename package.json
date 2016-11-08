@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node 'app/cook-tmpl.js' && node index.js"
+    "start": "node 'app/cook-tmpl.js' && node_modules/gulp/bin/gulp.js build && node index.js"
   },
   "dependencies": {
     "babel-core": "^6.18.2",
