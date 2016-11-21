@@ -40,9 +40,7 @@ function bundle() {
     .on('error', err => errorLog('Browserify Error', err))
     .pipe(source(paths.localTodoDestName))
     .pipe(buffer())
-    .pipe($.sourcemaps.init({loadMaps: true}))
     .pipe($.uglify())
     .on('error', $.util.log)
-    .pipe($.sourcemaps.write('./'))
     .pipe(gulp.dest(paths.localTodoDest));
 }
