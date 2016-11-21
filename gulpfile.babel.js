@@ -1,5 +1,4 @@
 import gulp        from 'gulp';
-import loadPlugins from 'gulp-load-plugins';
 
 import source      from 'vinyl-source-stream';
 import buffer      from 'vinyl-buffer';
@@ -10,17 +9,8 @@ import babelify    from 'babelify';
 import watchify    from 'watchify';
 import vueify      from 'vueify';
 
-const $ = loadPlugins();
-console.log($);
-
-
-const paths = {
-  localTodoEntry: './app/local-todo/client/main.js',
-  localTodoDestName: 'bundle.js',
-  localTodoDest: './app/local-todo/public'
-};
-
-const errorLog = (msg, err) => $.util.log(msg, $.util.colors.red(err.message));
+import { paths } from './config';
+import { gulpPlugins as $, errorLog } from './tasks/util';
 
 /*
  * make a bundler
@@ -39,12 +29,6 @@ gulp.task('browserify', () => {
     .on('error', err => errorLog('Babelify Error', err));
 });
 
-/*
- * just bundle client code
- */
-gulp.task('build', ['browserify'], () => {
-  bundle();
-});
 
 /*
  * start a server and watch code changes
@@ -76,7 +60,7 @@ gulp.task('browser-sync', ['browserify'], () => {
 /*
  * start server and watch all changes
  */
-gulp.task('watch', ['browser-sync', 'serve']);
+gulp.task('default', ['browser-sync', 'serve']);
 
 
 function bundle() {
