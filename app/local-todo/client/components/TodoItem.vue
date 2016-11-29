@@ -15,7 +15,7 @@
       @keyup.enter = 'endEdit'
       @blur        = 'cancelEdit'
       multiline)
-    span.todo-text(
+    .todo-text(
       v-if     = '!editable'
       ':class' = '{ "checked-item-text": complete }'
       @click   = 'edit')
@@ -130,12 +130,26 @@ export default {
   border-radius: 2px;
 }
 
+.text-wrapper .todo-text {
+  padding: 3px;
+  border-radius: 2px;
+}
+
+.text-wrapper .todo-text:hover {
+  background: #f5f5f5;
+}
+
 .check-wrapper .glyphicon-check {
   color: #70d040;
 }
 
+.check-wrapper .todo-check {
+  transition: 0.3s;
+}
+
 .remove-sign-wrapper .glyphicon-remove-sign:hover {
   color: #df5020;
+  transition: 0.2s;
 }
 
 </style>
