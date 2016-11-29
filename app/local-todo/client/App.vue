@@ -10,7 +10,7 @@
 
   progress-bar(':percentage'='done / count * 100')
 
-  .items-wrapper
+  .items-wrapper(v-if = "list.length")
     todo-item(
       v-for        = 'item in curList'
       ':id'        = 'item.id'
@@ -109,15 +109,19 @@ export default {
 <style>
 
 body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 0;
   padding-top: 20px;
+  min-height: 100vh;
 }
 
 #todo-list {
   max-width: 700px;
   min-width: 350px;
 
-  margin: 0 auto;
+  /*margin: 0 auto;*/
   padding: 10px;
 
   border: 1px solid #dddddd;
@@ -133,6 +137,7 @@ body {
 
 @media(max-width: 600px) {
   body {
+    display: block;
     padding: 0;
   }
 
