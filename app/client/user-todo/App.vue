@@ -1,135 +1,127 @@
 <template lang="pug">
 
-#todo-list
-  h1.page-header TODO
-    span#count-badge.badge(@click = 'mode = "all"') {{ list.length }}
-    span#active-badge.badge(@click = 'mode = "active"') {{ active }}
-    span#done-badge.badge(@click = 'mode = "done"') {{ done }}
-
-  .col-xs-12.col-sm-8.col-md-6.col-lg-4
-    .panel.panel-default
-
-      .panel-heading
-        add-item(@add-item = 'add')
-
-      .panel-body
-
-        progress-bar(':percentage'='done / count * 100')
-
-        todo-item(
-          v-for        = 'item in curList'
-          ':id'        = 'item.id'
-          ':complete'  = 'item.complete'
-          ':text'      = 'item.text'
-          @item-check  = 'check'
-          @item-remove = 'remove'
-          @item-edit   = 'edit')
-
-  a(href='/') Back
+#app
+  todo-list(':list'='list'
+            @item-check  = 'check'
+            @item-remove = 'remove'
+            @item-edit   = 'edit'
+            @item-add    = 'add')
 
 </template>
 
 
+<style>
+
+#app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding-top: 20px;
+  min-height: 100vh;
+}
+
+
+@media(max-width: 600px) {
+  #app {
+    display: block;
+    padding: 0;
+  }
+}
+
+</style>
+
+
 <script>
 
-import AddItem from '../components/AddItem.vue';
-import TodoItem from '../components/TodoItem.vue';
-import ProgressBar from '../components/ProgressBar.vue';
+import Vue from 'vue/dist/vue.js';
+import TodoList from '../components/TodoList.vue';
 
 export default {
 
   name: 'app',
 
   components: {
-    AddItem,
-    ProgressBar,
-    TodoItem
+    TodoList
   },
 
-  data: function() {
-    const list = JSON.parse(localStorage.getItem('todo-list')) || [];
-    list.forEach((el, index) => el.id = index);
-
-    return { list, mode: 'all' };
-  },
-
-  computed: {
-    done() {
-      return this.list.filter(el => el.complete).length;
-    },
-
-    active() {
-      return this.list.filter(el => !el.complete).length;
-    },
-
-    count() {
-      return this.list.length;
-    },
-
-    curList() {
-      if (this.mode === 'active') {
-        return this.list.filter(el => !el.complete);
-      } else if (this.mode === 'done') {
-        return this.list.filter(el => el.complete);
-      } else {
-        return this.list;
-      }
-    }
+  data() {
+    return { list: [] };
   },
 
   methods: {
     add(text) {
-      this.list.push({ text, complete: false});
-      this.updateList();
+      const self = this;
+      Vue.http.post('/u/add', { text })
+        .then(res => res.json())
+        .then(data => {
+          self.list = data.list;
+        })
+        .catch(err => console.error(err));
+
     },
 
     check(id) {
-      this.list[id].complete = !this.list[id].complete;
-      this.updateList();
+      const item = this.getItemById(id);
+      if (!item) {
+        console.error(`Item with id ${id} not found`);
+      }
+
+      const self = this;
+      Vue.http.post('/u/check', { id, complete: !item.complete })
+        .then(res => res.json())
+        .then(data => {
+          self.list = data.list;
+        })
+        .catch(err => console.error(err));
     },
 
     remove(id) {
-      this.list.splice(id, 1);
-      this.updateList();
+      const self = this;
+      Vue.http.post('/u/remove', { id })
+        .then(res => res.json())
+        .then(data => {
+          self.list = data.list;
+        })
+        .catch(err => console.error(err));
     },
 
     edit(id, text) {
-      this.list[id].text = text;
-      this.updateList();
+      const self = this;
+      Vue.http.post('/u/remove', { id, text })
+        .then(res => res.json())
+        .then(data => {
+          self.list = data.list;
+        })
+        .catch(err => console.error(err));
+
     },
 
-    updateList() {
-      this.list.forEach((el, index) => el.id = index);
-      localStorage.setItem('todo-list', JSON.stringify(this.list));
+    getItemById(id) {
+      for (const el of this.list) {
+        if (el.id === id) {
+          return el;
+        }
+      }
+      return null;
     },
 
     setMode(mode) {
-      this.mode = mode;
+      //this.mode = mode;
     }
+  },
+
+  created() {
+    const self = this;
+    Vue.http.get('/u/get')
+      .then(response => response.json())
+      .then(data => {
+        self.list = data.list;
+      })
+      .catch(err => {
+        console.error('Failed to fetch TODO list', err);
+      });
   }
 };
 
 </script>
-
-<style>
-
-.badge {
-  margin-left: 15px;
-  background-color: #aaaaaa;
-  color: white;
-  text-shadow: 0px 0px 2px #001f3f;
-}
-
-.badge:hover {
-  box-shadow: 1px 1px 1px #0074d9;
-}
-
-#active-badge {
-  background-color: #ffdc00;
-}
-
-#done-badge {
-  background-color: #2ecc40;
-}
-
-</style>

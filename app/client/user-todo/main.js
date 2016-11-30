@@ -3,7 +3,8 @@ import vueResource from 'vue-resource';
 import App from './App.vue';
 
 Vue.use(vueResource);
+
 new Vue({
-  el: "#todo-list",
+  el: "#app",
   render: (h) => h(App)
 });

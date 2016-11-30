@@ -15,11 +15,22 @@ import { gulpPlugins as $, errorLog } from './tasks/util';
 /*
  * make a bundler
  */
-let bundler;
+let bundler1, bundler2;
+
 gulp.task('browserify', () => {
 
-  bundler = browserify({
+  bundler1 = browserify({
     entries: paths.localTodoEntry,
+    cache: {},
+    packageCache: {}
+  })
+    .transform(vueify)
+    .on('error', err => errorLog('Vueify Error', err))
+    .transform(babelify)
+    .on('error', err => errorLog('Babelify Error', err));
+
+  bundler2 = browserify({
+    entries: paths.userTodoEntry,
     cache: {},
     packageCache: {}
   })
@@ -47,30 +58,49 @@ gulp.task('serve', () => {
 /*
  * sync browser with client-side code changes
  */
-gulp.task('browser-sync', ['browserify'], () => {
-  bundler
+gulp.task('local-todo', ['browserify'], () => {
+  bundler1
     .plugin(watchify)
     .plugin(hmr)
-    .on('update', bundle);
+    .on('update', bundle1);
 
-  bundle();
+  bundle1();
+});
+
+gulp.task('user-todo', ['browserify'], () => {
+  bundler2
+    .plugin(watchify)
+    .plugin(hmr)
+    .on('update', bundle2);
+
+  bundle2();
 });
 
 
 /*
  * start server and watch all changes
  */
-gulp.task('default', ['browser-sync', 'serve']);
+gulp.task('default', ['serve']);
 
 
-function bundle() {
-  bundler.bundle()
+function bundle1() {
+  bundler1.bundle()
     .on('error', err => errorLog('Browserify Error', err))
-    .pipe(source(paths.localTodoDestName))
+    .pipe(source(paths.destName))
     .pipe(buffer())
     .pipe($.sourcemaps.init({loadMaps: true}))
-    .pipe($.uglify())
     .on('error', $.util.log)
     .pipe($.sourcemaps.write('./'))
     .pipe(gulp.dest(paths.localTodoDest));
+}
+
+function bundle2() {
+  bundler2.bundle()
+    .on('error', err => errorLog('Browserify Error', err))
+    .pipe(source(paths.destName))
+    .pipe(buffer())
+    .pipe($.sourcemaps.init({loadMaps: true}))
+    .on('error', $.util.log)
+    .pipe($.sourcemaps.write('./'))
+    .pipe(gulp.dest(paths.userTodoDest));
 }
