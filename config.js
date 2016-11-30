@@ -1,5 +1,5 @@
 export const paths = {
-  localTodoEntry: './app/local-todo/client/main.js',
+  localTodoEntry: './app/client/local-todo/main.js',
   localTodoDestName: 'bundle.js',
-  localTodoDest: './app/local-todo/public'
+  localTodoDest: './app/client/local-todo/public'
 };

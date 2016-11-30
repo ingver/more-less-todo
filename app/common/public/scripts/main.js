@@ -1,3 +1,0 @@
-/* globals require */
-
-require(['./thirdparties']);
