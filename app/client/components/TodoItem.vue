@@ -2,7 +2,7 @@
 
 .item-container
   .check-wrapper
-    span.todo-check.glyphicon(
+    .todo-check.glyphicon(
       ':class' = 'checked'
       @click   = 'check')
 
@@ -22,9 +22,72 @@
       | {{ text }}
 
   .remove-sign-wrapper
-    span.remove.glyphicon.glyphicon-remove-sign('@click'='remove')
+    .remove.glyphicon.glyphicon-remove-sign('@click'='remove')
 
 </template>
+
+
+<style>
+
+.item-container {
+  display: flex;
+
+  border-bottom: 1px solid #dddddd;
+  margin-top: -1px;
+  padding: 10px 0px;
+}
+
+.item-container:last-child {
+  border-bottom: none;
+}
+
+.item-container > div {
+  margin: 0px 10px;
+}
+
+.item-container > div > div {
+  vertical-align: middle;
+}
+
+.item-container .text-wrapper {
+  flex-grow: 1;
+
+  word-break: break-all;
+}
+
+.text-wrapper .checked-item-text {
+  text-decoration: line-through;
+}
+
+.text-wrapper .text-edit {
+  outline: none;
+  border: 1px solid #bbbbbb;
+  border-radius: 2px;
+}
+
+.text-wrapper .todo-text {
+  padding: 3px;
+  border-radius: 2px;
+}
+
+.text-wrapper .todo-text:hover {
+  background: #f5f5f5;
+}
+
+.check-wrapper .glyphicon-check {
+  color: #70d040;
+}
+
+.check-wrapper .todo-check {
+  transition: 0.3s;
+}
+
+.remove-sign-wrapper .glyphicon-remove-sign:hover {
+  color: #df5020;
+  transition: 0.2s;
+}
+
+</style>
 
 
 <script>
@@ -94,62 +157,3 @@ export default {
 };
 
 </script>
-
-
-<style>
-
-.item-container {
-  display: flex;
-
-  border-bottom: 1px solid #dddddd;
-  margin-top: -1px;
-  padding: 10px 0px;
-}
-
-.item-container:last-child {
-  border-bottom: none;
-}
-
-.item-container > div {
-  margin: 0px 10px;
-}
-
-.item-container .text-wrapper {
-  flex-grow: 1;
-
-  word-break: break-all;
-}
-
-.text-wrapper .checked-item-text {
-  text-decoration: line-through;
-}
-
-.text-wrapper .text-edit {
-  outline: none;
-  border: 1px solid #bbbbbb;
-  border-radius: 2px;
-}
-
-.text-wrapper .todo-text {
-  padding: 3px;
-  border-radius: 2px;
-}
-
-.text-wrapper .todo-text:hover {
-  background: #f5f5f5;
-}
-
-.check-wrapper .glyphicon-check {
-  color: #70d040;
-}
-
-.check-wrapper .todo-check {
-  transition: 0.3s;
-}
-
-.remove-sign-wrapper .glyphicon-remove-sign:hover {
-  color: #df5020;
-  transition: 0.2s;
-}
-
-</style>

@@ -12,6 +12,19 @@
 </template>
 
 
+<style>
+
+.add-item {
+  margin-bottom: 10px;
+}
+
+.add-item input {
+  font-size: 18px;
+}
+
+</style>
+
+
 <script>
 
 export default {
@@ -26,27 +39,13 @@ export default {
 
   methods: {
     add() {
-      console.log('this.input', this.input);
       if (this.input === '') {
         return;
       }
-      this.$emit('add-item', this.input)
+      this.$emit('item-add', this.input)
       this.input = '';
     }
   }
 };
 
 </script>
-
-
-<style>
-
-.add-item {
-  margin-bottom: 10px;
-}
-
-.add-item input {
-  font-size: 18px;
-}
-
-</style>

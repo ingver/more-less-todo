@@ -10,21 +10,6 @@
 </template>
 
 
-<script>
-
-export default {
-  name: 'progress-bar',
-  props: ['percentage'],
-  computed: {
-    width() {
-      return `${this.percentage}%`;
-    }
-  }
-};
-
-</script>
-
-
 <style>
 
 .progress-wrapper {
@@ -44,3 +29,18 @@ export default {
 }
 
 </style>
+
+
+<script>
+
+export default {
+  name: 'progress-bar',
+  props: ['percentage'],
+  computed: {
+    width() {
+      return `${this.percentage}%`;
+    }
+  }
+};
+
+</script>

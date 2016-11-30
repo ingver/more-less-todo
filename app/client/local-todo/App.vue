@@ -1,76 +1,56 @@
 <template lang="pug">
 
-#todo-list
-  //h1.page-header TODO
-    span#count-badge.badge(@click = 'mode = "all"') {{ list.length }}
-    span#active-badge.badge(@click = 'mode = "active"') {{ active }}
-    span#done-badge.badge(@click = 'mode = "done"') {{ done }}
-
-  add-item(@add-item = 'add')
-
-  progress-bar(':percentage'='done / count * 100')
-
-  .items-wrapper(v-if = "list.length")
-    todo-item(
-      v-for        = 'item in curList'
-      ':id'        = 'item.id'
-      ':complete'  = 'item.complete'
-      ':text'      = 'item.text'
-      @item-check  = 'check'
-      @item-remove = 'remove'
-      @item-edit   = 'edit')
-
-  //a(href='/') Back
+#app
+  todo-list(':list'='list'
+            @item-check  = 'check'
+            @item-remove = 'remove'
+            @item-edit   = 'edit'
+            @item-add    = 'add')
 
 </template>
 
 
+<style>
+
+#app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding-top: 20px;
+  min-height: 100vh;
+}
+
+
+@media(max-width: 600px) {
+  #app {
+    display: block;
+    padding: 0;
+  }
+}
+
+</style>
+
+
 <script>
 
-import AddItem from '../components/AddItem.vue';
-import TodoItem from '../components/TodoItem.vue';
-import ProgressBar from '../components/ProgressBar.vue';
+import TodoList from '../components/TodoList.vue';
 
 export default {
 
   name: 'app',
 
   components: {
-    AddItem,
-    ProgressBar,
-    TodoItem
+    TodoList
   },
 
-  data: function() {
+  data() {
     const list = JSON.parse(localStorage.getItem('todo-list')) || [];
     list.forEach((el, index) => el.id = index);
 
-    return { list, mode: 'all' };
+    return { list };
   },
 
-  computed: {
-    done() {
-      return this.list.filter(el => el.complete).length;
-    },
-
-    active() {
-      return this.list.filter(el => !el.complete).length;
-    },
-
-    count() {
-      return this.list.length;
-    },
-
-    curList() {
-      if (this.mode === 'active') {
-        return this.list.filter(el => !el.complete);
-      } else if (this.mode === 'done') {
-        return this.list.filter(el => el.complete);
-      } else {
-        return this.list;
-      }
-    }
-  },
 
   methods: {
     add(text) {
@@ -105,49 +85,3 @@ export default {
 };
 
 </script>
-
-<style>
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  padding-top: 20px;
-  min-height: 100vh;
-}
-
-#todo-list {
-  max-width: 700px;
-  min-width: 350px;
-
-  /*margin: 0 auto;*/
-  padding: 10px;
-
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-
-  font-size: 18px;
-}
-
-#todo-list .items-wrapper {
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-}
-
-@media(max-width: 600px) {
-  body {
-    display: block;
-    padding: 0;
-  }
-
-  #todo-list {
-    width: 100%;
-    border: none;
-    max-width: auto;
-    min-width: auto;
-    margin: auto;
-  }
-}
-
-</style>
