@@ -1,31 +1,26 @@
 <template lang="pug">
 
 #todo-list
-  h1.page-header TODO
+  //h1.page-header TODO
     span#count-badge.badge(@click = 'mode = "all"') {{ list.length }}
     span#active-badge.badge(@click = 'mode = "active"') {{ active }}
     span#done-badge.badge(@click = 'mode = "done"') {{ done }}
 
-  .col-xs-12.col-sm-8.col-md-6.col-lg-4
-    .panel.panel-default
+  add-item(@add-item = 'add')
 
-      .panel-heading
-        add-item(@add-item = 'add')
+  progress-bar(':percentage'='done / count * 100')
 
-      .panel-body
+  .items-wrapper(v-if = "list.length")
+    todo-item(
+      v-for        = 'item in curList'
+      ':id'        = 'item.id'
+      ':complete'  = 'item.complete'
+      ':text'      = 'item.text'
+      @item-check  = 'check'
+      @item-remove = 'remove'
+      @item-edit   = 'edit')
 
-        progress-bar(':percentage'='done / count * 100')
-
-        todo-item(
-          v-for        = 'item in curList'
-          ':id'        = 'item.id'
-          ':complete'  = 'item.complete'
-          ':text'      = 'item.text'
-          @item-check  = 'check'
-          @item-remove = 'remove'
-          @item-edit   = 'edit')
-
-  a(href='/') Back
+  //a(href='/') Back
 
 </template>
 
@@ -113,23 +108,46 @@ export default {
 
 <style>
 
-.badge {
-  margin-left: 15px;
-  background-color: #aaaaaa;
-  color: white;
-  text-shadow: 0px 0px 2px #001f3f;
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding-top: 20px;
+  min-height: 100vh;
 }
 
-.badge:hover {
-  box-shadow: 1px 1px 1px #0074d9;
+#todo-list {
+  max-width: 700px;
+  min-width: 350px;
+
+  /*margin: 0 auto;*/
+  padding: 10px;
+
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+
+  font-size: 18px;
 }
 
-#active-badge {
-  background-color: #ffdc00;
+#todo-list .items-wrapper {
+  border: 1px solid #dddddd;
+  border-radius: 5px;
 }
 
-#done-badge {
-  background-color: #2ecc40;
+@media(max-width: 600px) {
+  body {
+    display: block;
+    padding: 0;
+  }
+
+  #todo-list {
+    width: 100%;
+    border: none;
+    max-width: auto;
+    min-width: auto;
+    margin: auto;
+  }
 }
 
 </style>

@@ -1,8 +1,8 @@
 <template lang="pug">
 
-.input-group
+.add-item.input-group
   input.form-control(
-    v-model.lazy      = 'input'
+    v-model.lazy = 'input'
     @keyup.enter = 'add'
     placeholder  = 'What do you need to do?')
 
@@ -41,10 +41,12 @@ export default {
 
 <style>
 
-#todo-input-add {
-  border: 1px solid #ccc;
-  padding: 3px;
-  margin-right: 8px;
+.add-item {
+  margin-bottom: 10px;
+}
+
+.add-item input {
+  font-size: 18px;
 }
 
 </style>

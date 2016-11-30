@@ -1,13 +1,13 @@
 <template lang="pug">
 
-.row.list-group-item
-  .col-xs-1
+.item-container
+  .check-wrapper
     span.todo-check.glyphicon(
       ':class' = 'checked'
       @click   = 'check')
 
-  .col-xs-8.col-sm-9.col-md-9.col-lg-9
-    input(
+  .text-wrapper
+    input.text-edit(
       v-autofocus  = ''
       v-if         = 'editable'
       v-model      = 'editedText'
@@ -15,15 +15,13 @@
       @keyup.enter = 'endEdit'
       @blur        = 'cancelEdit'
       multiline)
-    span.todo-text.word-break-constraint(
+    .todo-text(
       v-if     = '!editable'
       ':class' = '{ "checked-item-text": complete }'
       @click   = 'edit')
       | {{ text }}
 
-  .col-xs-1
-
-  .col-xs-1.remove-sign-wrapper
+  .remove-sign-wrapper
     span.remove.glyphicon.glyphicon-remove-sign('@click'='remove')
 
 </template>
@@ -100,36 +98,58 @@ export default {
 
 <style>
 
-.checked-item-text {
-  text-decoration: line-through;
-};
+.item-container {
+  display: flex;
 
-.word-break-constraint {
+  border-bottom: 1px solid #dddddd;
+  margin-top: -1px;
+  padding: 10px 0px;
+}
+
+.item-container:last-child {
+  border-bottom: none;
+}
+
+.item-container > div {
+  margin: 0px 10px;
+}
+
+.item-container .text-wrapper {
+  flex-grow: 1;
+
   word-break: break-all;
 }
 
-.remove {
-  float: right;
-  border-radius: 3px;
+.text-wrapper .checked-item-text {
+  text-decoration: line-through;
+}
+
+.text-wrapper .text-edit {
+  outline: none;
+  border: 1px solid #bbbbbb;
+  border-radius: 2px;
+}
+
+.text-wrapper .todo-text {
+  padding: 3px;
+  border-radius: 2px;
+}
+
+.text-wrapper .todo-text:hover {
+  background: #f5f5f5;
+}
+
+.check-wrapper .glyphicon-check {
+  color: #70d040;
+}
+
+.check-wrapper .todo-check {
+  transition: 0.3s;
+}
+
+.remove-sign-wrapper .glyphicon-remove-sign:hover {
   color: #df5020;
-}
-
-.remove:hover {
-  color: red;
-}
-
-.todo-check {
-  float: left;
-  margin-right: 8px;
-}
-
-.glyphicon-check {
-  color: #50df20;
-}
-
-.list-group-item {
-  border-left: 0px;
-  border-right: 0px;
+  transition: 0.2s;
 }
 
 </style>
