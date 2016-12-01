@@ -13,18 +13,19 @@
 <style>
 
 .progress-wrapper {
-  height: 26px;
+  height: 30px;
   overflow: hidden;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 
-  border: 1px solid #dddddd;
-  border-radius: 5px;
+  border: 1px solid #f5f5f5;
+  box-shadow: inset -1px 2px 5px #cccccc;
 }
 
 .my-progress-bar {
   height: 100%;
   background-color: #70d040;
   width: 0%;
+
   transition: 0.5s;
 }
 

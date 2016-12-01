@@ -7,7 +7,8 @@
       @click   = 'check')
 
   .text-wrapper
-    input.text-edit(
+    input(
+      type         = 'text'
       v-autofocus  = ''
       v-if         = 'editable'
       v-model      = 'editedText'
@@ -15,7 +16,7 @@
       @keyup.enter = 'endEdit'
       @blur        = 'cancelEdit'
       multiline)
-    .todo-text(
+    .item-text(
       v-if     = '!editable'
       ':class' = '{ "checked-item-text": complete }'
       @click   = 'edit')
@@ -31,10 +32,10 @@
 
 .item-container {
   display: flex;
-
-  border-bottom: 1px solid #dddddd;
-  margin-top: -1px;
   padding: 10px 0px;
+
+  border-bottom: 1px solid #eeeeee;
+  margin-top: -1px;
 }
 
 .item-container:last-child {
@@ -51,27 +52,32 @@
 
 .item-container .text-wrapper {
   flex-grow: 1;
+  margin: 0;
 
   word-break: break-all;
+}
+
+.item-container .text-wrapper:hover {
+  background: #f5f5f5;
 }
 
 .text-wrapper .checked-item-text {
   text-decoration: line-through;
 }
 
-.text-wrapper .text-edit {
-  outline: none;
-  border: 1px solid #bbbbbb;
-  border-radius: 2px;
-}
-
-.text-wrapper .todo-text {
+.text-wrapper input[type="text"] {
+  width: 100%;
   padding: 3px;
-  border-radius: 2px;
+
+  border: 1px solid #bbbbbb;
+  box-shadow: 0px 0px 2px #cccccc;
+  outline: none;
 }
 
-.text-wrapper .todo-text:hover {
-  background: #f5f5f5;
+.text-wrapper .item-text {
+  padding: 4px;
+
+  border-radius: 2px;
 }
 
 .check-wrapper .glyphicon-check {

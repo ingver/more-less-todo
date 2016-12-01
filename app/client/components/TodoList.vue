@@ -26,30 +26,30 @@
 <style>
 
 .todo-list {
-  max-width: 700px;
-  min-width: 350px;
+  width: 700px;
 
-  /*margin: 0 auto;*/
-  padding: 10px;
+  padding: 20px 25px;
 
-  border: 1px solid #dddddd;
-  border-radius: 5px;
+  border: none;
+  box-shadow: 0px 0px 30px #cccccc;
 
   font-size: 18px;
 }
 
 .todo-list .items-wrapper {
-  border: 1px solid #dddddd;
-  border-radius: 5px;
+  border: 1px solid #f5f5f5;
+  box-shadow: 0px 0px 10px #cccccc;
 }
 
-@media(max-width: 600px) {
+@media(max-width: 700px) {
   .todo-list {
     width: 100%;
-    border: none;
-    max-width: auto;
-    min-width: auto;
+    min-width: 350px;
     margin: auto;
+    padding: 10px;
+
+    border: none;
+    box-shadow: none;
   }
 }
 

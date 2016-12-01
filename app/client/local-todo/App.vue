@@ -12,20 +12,23 @@
 
 <style>
 
+* {
+  box-sizing: border-box;
+}
+
 #app {
   display: flex;
   justify-content: center;
-  align-items: center;
   margin: 0;
   padding-top: 20px;
-  min-height: 100vh;
 }
 
 
-@media(max-width: 600px) {
+@media(max-width: 700px) {
   #app {
     display: block;
     padding: 0;
+    min-width: 350px;
   }
 }
 
