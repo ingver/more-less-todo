@@ -46,7 +46,7 @@
     width: 100%;
     min-width: 350px;
     margin: auto;
-    padding: 10px;
+    padding: 10px 20px;
 
     border: none;
     box-shadow: none;

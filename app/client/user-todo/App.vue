@@ -12,20 +12,23 @@
 
 <style>
 
+* {
+  box-sizing: border-box;
+}
+
 #app {
   display: flex;
   justify-content: center;
-  align-items: center;
   margin: 0;
   padding-top: 20px;
-  min-height: 100vh;
 }
 
 
-@media(max-width: 600px) {
+@media(max-width: 700px) {
   #app {
     display: block;
     padding: 0;
+    min-width: 350px;
   }
 }
 
@@ -88,7 +91,7 @@ export default {
 
     edit(id, text) {
       const self = this;
-      Vue.http.post('/u/remove', { id, text })
+      Vue.http.post('/u/edit', { id, text })
         .then(res => res.json())
         .then(data => {
           self.list = data.list;
