@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "serve": "node index.js",
-    "build": "./node_modules/.bin/gulp --gulpfile ./build.babel.js",
-    "start": "./node_modules/.bin/npm-run-all build serve"
+    "start": "node index.js",
+    "build": "./node_modules/.bin/gulp --gulpfile ./build.babel.js"
   },
   "dependencies": {
     "babel-core": "^6.18.2",

@@ -3,6 +3,5 @@ npm-debug.log
 *.sw*
 *.tmpl.js
 **/.tern*
-**/public/
 **/*.map
 **/*.bk
