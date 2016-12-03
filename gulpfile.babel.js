@@ -1,18 +1,17 @@
-import gulp       from 'gulp';
-import rename     from 'gulp-rename';
-import glob       from 'glob';
-import del        from 'del';
+import gulp        from 'gulp';
+import loadPlugins from 'gulp-load-plugins';
+import rename      from 'gulp-rename';
+import glob        from 'glob';
+import del         from 'del';
 
-import source     from 'vinyl-source-stream';
-//import buffer     from 'vinyl-buffer';
-import es         from 'event-stream';
+import source      from 'vinyl-source-stream';
+import buffer      from 'vinyl-buffer';
+import es          from 'event-stream';
 import browserSync from 'browser-sync';
 
-import browserify from 'browserify';
-import babelify   from 'babelify';
-import vueify     from 'vueify';
-
-import { gulpPlugins as $ } from './tasks/util';
+import browserify  from 'browserify';
+import babelify    from 'babelify';
+import vueify      from 'vueify';
 
 
 
@@ -20,10 +19,11 @@ const clientDir = 'app/client/',
       builtScripts = clientDir + '/**/public/bundle.js';
 
 const bs = browserSync.create();
+const $ = loadPlugins();
 
 
 
-gulp.task('default', ['serve', 'watch']);
+gulp.task('default', ['bsync']);
 
 
 
@@ -74,6 +74,43 @@ gulp.task('build', done => {
           path.dirname = path.dirname.slice(clientDir.length) + '/public';
           path.basename = 'bundle';
         }))
+        .pipe(buffer())
+        .pipe($.sourcemaps.init({ loadMaps: true }))
+        .on('error', errHandler('SourceMaps error:'))
+        .pipe($.sourcemaps.write('./'))
+        .pipe(gulp.dest(clientDir));
+    });
+
+    es.merge(tasks)
+      .on('error', errHandler('Streams Merge Error'))
+      .on('end', done);
+  });
+});
+
+
+
+gulp.task('build:prod', ['clean'], done => {
+
+  glob(clientDir + '**/main.js', (err, files) => {
+
+    if(err) { console.error(err); done(err); return; }
+
+    const tasks = files.map(entry => {
+      return browserify({
+        entries: [entry]
+      })
+        .transform(vueify)
+        .transform(babelify)
+        .bundle()
+        .on('error', errHandler('Browserify Error:'))
+        .pipe(source(entry))
+        .pipe(rename(path => {
+          path.dirname = path.dirname.slice(clientDir.length) + '/public';
+          path.basename = 'bundle';
+        }))
+        .pipe(buffer())
+        .pipe($.uglify())
+        .on('error', errHandler('Uglify error:'))
         .pipe(gulp.dest(clientDir));
     });
 
@@ -86,7 +123,7 @@ gulp.task('build', done => {
 
 
 gulp.task('clean', () => {
-  return del(builtScripts);
+  return del(clientDir + '**/public/**');
 });
 
 
