@@ -6,6 +6,7 @@ import del        from 'del';
 import source     from 'vinyl-source-stream';
 //import buffer     from 'vinyl-buffer';
 import es         from 'event-stream';
+import browserSync from 'browser-sync';
 
 import browserify from 'browserify';
 import babelify   from 'babelify';
@@ -18,9 +19,23 @@ import { gulpPlugins as $ } from './tasks/util';
 const clientDir = 'app/client/',
       builtScripts = clientDir + '/**/public/bundle.js';
 
+const bs = browserSync.create();
+
 
 
 gulp.task('default', ['serve', 'watch']);
+
+
+
+gulp.task('bsync', ['serve', 'watch'], () => {
+  glob(builtScripts, (err, files) => {
+    bs.init({
+      proxy: 'localhost:5000',
+      files,
+      open: false
+    });
+  });
+})
 
 
 
@@ -29,9 +44,10 @@ gulp.task('watch', ['build'], () => {
     clientDir + '/**/main.js',
     clientDir + '/**/*.vue'
   ];
-
-  return gulp.watch(globs, ['build']);
+  return gulp.watch(globs, ['build'])
+    .on('error', errHandler());
 });
+
 
 
 gulp.task('build', done => {
@@ -45,14 +61,19 @@ gulp.task('build', done => {
         .transform(vueify)
         .transform(babelify)
         .bundle()
+        .on('error', errHandler('Browserify Error:'))
         .pipe(source(entry))
         .pipe(rename(path => {
           path.dirname = path.dirname.slice(clientDir.length) + '/public';
           path.basename = 'bundle';
         }))
         .pipe(gulp.dest(clientDir));
+
+      return stream;
     });
-    es.merge(tasks).on('end', done);
+    es.merge(tasks)
+      .on('error', errHandler('Streams Merge Error'))
+      .on('end', done);
   });
 });
 
@@ -73,3 +94,15 @@ gulp.task('serve', () => {
     ignore: ['app/client/**']
   });
 });
+
+
+
+const errHandler = (msg) => {
+  return function(err) {
+    if (msg) {
+      console.error(msg);
+    }
+    console.error(err.message);
+    this.emit('end');
+  };
+};
