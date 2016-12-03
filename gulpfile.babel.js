@@ -1,106 +1,151 @@
 import gulp        from 'gulp';
+import loadPlugins from 'gulp-load-plugins';
+import rename      from 'gulp-rename';
+import glob        from 'glob';
+import del         from 'del';
 
 import source      from 'vinyl-source-stream';
 import buffer      from 'vinyl-buffer';
+import es          from 'event-stream';
+import browserSync from 'browser-sync';
 
 import browserify  from 'browserify';
-import hmr         from 'browserify-hmr';
 import babelify    from 'babelify';
-import watchify    from 'watchify';
 import vueify      from 'vueify';
 
-import { paths } from './config';
-import { gulpPlugins as $, errorLog } from './tasks/util';
 
-/*
- * make a bundler
- */
-let bundler1, bundler2;
 
-gulp.task('browserify', () => {
+const clientDir = 'app/client/',
+      builtScripts = clientDir + '/**/public/bundle.js';
 
-  bundler1 = browserify({
-    entries: paths.localTodoEntry,
-    cache: {},
-    packageCache: {}
-  })
-    .transform(vueify)
-    .on('error', err => errorLog('Vueify Error', err))
-    .transform(babelify)
-    .on('error', err => errorLog('Babelify Error', err));
+const bs = browserSync.create();
+const $ = loadPlugins();
 
-  bundler2 = browserify({
-    entries: paths.userTodoEntry,
-    cache: {},
-    packageCache: {}
-  })
-    .transform(vueify)
-    .on('error', err => errorLog('Vueify Error', err))
-    .transform(babelify)
-    .on('error', err => errorLog('Babelify Error', err));
+
+
+gulp.task('default', ['bsync']);
+
+
+
+gulp.task('bsync', ['serve', 'watch'], () => {
+
+  glob(builtScripts, (err, files) => {
+
+    if (err) { console.error(err); return; }
+
+    bs.init({
+      proxy: 'localhost:5000',
+      files,
+      open: false
+    });
+  });
+
 });
 
 
-/*
- * start a server and watch code changes
- */
+
+gulp.task('watch', ['build'], () => {
+  const globs = [
+    clientDir + '/**/main.js',
+    clientDir + '/**/*.vue'
+  ];
+  return gulp.watch(globs, ['build'])
+    .on('error', errHandler());
+});
+
+
+
+gulp.task('build', done => {
+
+  glob(clientDir + '**/main.js', (err, files) => {
+
+    if(err) { console.error(err); done(err); return; }
+
+    const tasks = files.map(entry => {
+      return browserify({
+        entries: [entry]
+      })
+        .transform(vueify)
+        .transform(babelify)
+        .bundle()
+        .on('error', errHandler('Browserify Error:'))
+        .pipe(source(entry))
+        .pipe(rename(path => {
+          path.dirname = path.dirname.slice(clientDir.length) + '/public';
+          path.basename = 'bundle';
+        }))
+        .pipe(buffer())
+        .pipe($.sourcemaps.init({ loadMaps: true }))
+        .on('error', errHandler('SourceMaps error:'))
+        .pipe($.sourcemaps.write('./'))
+        .pipe(gulp.dest(clientDir));
+    });
+
+    es.merge(tasks)
+      .on('error', errHandler('Streams Merge Error'))
+      .on('end', done);
+  });
+});
+
+
+
+gulp.task('build:prod', ['clean'], done => {
+
+  glob(clientDir + '**/main.js', (err, files) => {
+
+    if(err) { console.error(err); done(err); return; }
+
+    const tasks = files.map(entry => {
+      return browserify({
+        entries: [entry]
+      })
+        .transform(vueify)
+        .transform(babelify)
+        .bundle()
+        .on('error', errHandler('Browserify Error:'))
+        .pipe(source(entry))
+        .pipe(rename(path => {
+          path.dirname = path.dirname.slice(clientDir.length) + '/public';
+          path.basename = 'bundle';
+        }))
+        .pipe(buffer())
+        .pipe($.uglify())
+        .on('error', errHandler('Uglify error:'))
+        .pipe(gulp.dest(clientDir));
+    });
+
+    es.merge(tasks)
+      .on('error', errHandler('Streams Merge Error'))
+      .on('end', done);
+  });
+});
+
+
+
+gulp.task('clean', () => {
+  return del(clientDir + '**/public/**');
+});
+
+
+
 gulp.task('serve', () => {
   return $.nodemon({
     script: './index.js',
     // watch code and configs
     ext: 'js json',
     // ignore client-side code
-    ignore: ['**/public/**', '**/client/**']
+    ignore: ['app/client/**']
   });
 });
 
 
-/*
- * sync browser with client-side code changes
- */
-gulp.task('local-todo', ['browserify'], () => {
-  bundler1
-    .plugin(watchify)
-    .plugin(hmr)
-    .on('update', bundle1);
 
-  bundle1();
-});
-
-gulp.task('user-todo', ['browserify'], () => {
-  bundler2
-    .plugin(watchify)
-    .plugin(hmr)
-    .on('update', bundle2);
-
-  bundle2();
-});
-
-
-/*
- * start server and watch all changes
- */
-gulp.task('default', ['serve']);
-
-
-function bundle1() {
-  bundler1.bundle()
-    .on('error', err => errorLog('Browserify Error', err))
-    .pipe(source(paths.destName))
-    .pipe(buffer())
-    .pipe($.sourcemaps.init({loadMaps: true}))
-    .on('error', $.util.log)
-    .pipe($.sourcemaps.write('./'))
-    .pipe(gulp.dest(paths.localTodoDest));
-}
-
-function bundle2() {
-  bundler2.bundle()
-    .on('error', err => errorLog('Browserify Error', err))
-    .pipe(source(paths.destName))
-    .pipe(buffer())
-    .pipe($.sourcemaps.init({loadMaps: true}))
-    .on('error', $.util.log)
-    .pipe($.sourcemaps.write('./'))
-    .pipe(gulp.dest(paths.userTodoDest));
-}
+const errHandler = (msg) => {
+  return function(err) {
+    if (msg) {
+      console.error(msg);
+    }
+    console.error(err.message);
+    this.emit('end');
+  };
+};
