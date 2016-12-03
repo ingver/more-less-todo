@@ -28,14 +28,19 @@ gulp.task('default', ['serve', 'watch']);
 
 
 gulp.task('bsync', ['serve', 'watch'], () => {
+
   glob(builtScripts, (err, files) => {
+
+    if (err) { console.error(err); return; }
+
     bs.init({
       proxy: 'localhost:5000',
       files,
       open: false
     });
   });
-})
+
+});
 
 
 
@@ -51,8 +56,10 @@ gulp.task('watch', ['build'], () => {
 
 
 gulp.task('build', done => {
+
   glob(clientDir + '**/main.js', (err, files) => {
-    if(err) done(err);
+
+    if(err) { console.error(err); done(err); return; }
 
     const tasks = files.map(entry => {
       return browserify({
@@ -68,9 +75,8 @@ gulp.task('build', done => {
           path.basename = 'bundle';
         }))
         .pipe(gulp.dest(clientDir));
-
-      return stream;
     });
+
     es.merge(tasks)
       .on('error', errHandler('Streams Merge Error'))
       .on('end', done);
