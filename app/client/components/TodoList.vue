@@ -23,7 +23,7 @@
 </template>
 
 
-<style>
+<style scoped>
 
 .todo-list {
   width: 700px;

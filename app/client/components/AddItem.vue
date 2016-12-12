@@ -13,7 +13,7 @@
 </template>
 
 
-<style>
+<style scoped>
 
 .add-item {
   display: flex;

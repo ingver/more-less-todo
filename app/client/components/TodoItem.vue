@@ -1,10 +1,12 @@
 <template lang="pug">
 
 .item-container
-  .check-wrapper
-    .todo-check.glyphicon(
-      ':class' = 'checked'
-      @click   = 'check')
+  label.check-wrapper
+    input(
+      type = 'checkbox'
+      ':checked' = 'complete'
+      @click = 'check')
+    span
 
   .text-wrapper
     input(
@@ -22,13 +24,12 @@
       @click   = 'edit')
       | {{ text }}
 
-  .remove-sign-wrapper
-    .remove.glyphicon.glyphicon-remove-sign('@click'='remove')
+  button.remove(@click = 'remove') X
 
 </template>
 
 
-<style>
+<style scoped>
 
 .item-container {
   display: flex;
@@ -42,23 +43,16 @@
   border-bottom: none;
 }
 
-.item-container > div {
-  margin: 0px 10px;
-}
-
-.item-container > div > div {
-  vertical-align: middle;
-}
-
 .item-container .text-wrapper {
   flex-grow: 1;
-  margin: 0;
+  margin: 0 10px;
 
   word-break: break-all;
 }
 
 .item-container .text-wrapper:hover {
   background: #f5f5f5;
+  background: rgba(240, 240, 240, 0.5);
 }
 
 .text-wrapper .checked-item-text {
@@ -80,17 +74,94 @@
   border-radius: 2px;
 }
 
-.check-wrapper .glyphicon-check {
-  color: #70d040;
+.item-container .check-wrapper {
+  margin: 0px 10px;
 }
 
-.check-wrapper .todo-check {
+.check-wrapper input[type="checkbox"] {
+  margin: 0;
+  padding: 0;
+  display: none;
+
+  color: #70d040;
+  outline: none;
+  background: black;
+}
+
+.check-wrapper input[type="checkbox"] + span {
+  display: block;
+  position: relative;
+  width: 30px;
+  height: 30px;
+
+  background: none;
+  border: 1px solid lightgreen;
+  border-radius: 33%;
+
   transition: 0.3s;
 }
 
-.remove-sign-wrapper .glyphicon-remove-sign:hover {
-  color: #df5020;
-  transition: 0.2s;
+.check-wrapper input[type="checkbox"] + span:hover {
+  border: 1px solid green;
+}
+
+.check-wrapper input[type="checkbox"]:checked + span {
+  background: lightgreen;
+  border: 1px solid green;
+}
+
+.check-wrapper input[type="checkbox"]:checked + span::before,
+.check-wrapper input[type="checkbox"]:checked + span::after {
+  content: "\2713";
+  position: absolute;
+  width: 30px;
+  padding: 0;
+  margin: 0;
+
+  color: green;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 26px;
+  line-height: 30px;
+
+  transition: 0.3s;
+}
+
+.item-container .remove {
+  display: block;
+  position: relative;
+  margin: 0;
+  margin-right: 10px;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+
+  background: none;
+  border: none;
+  outline: none;
+
+  font-size: 0px;
+}
+
+.item-container:hover .remove::before,
+.item-container:hover .remove::after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 26px;
+  height: 2px;
+  top: 14px;
+  left: 2px;
+
+  background: #f56960;
+}
+
+.item-container:hover .remove::before {
+  transform: rotate(-45deg);
+}
+
+.item-container:hover .remove::after {
+  transform: rotate(45deg);
 }
 
 </style>

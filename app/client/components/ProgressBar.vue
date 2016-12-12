@@ -10,7 +10,7 @@
 </template>
 
 
-<style>
+<style scoped>
 
 .progress-wrapper {
   height: 30px;
