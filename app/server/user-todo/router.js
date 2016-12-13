@@ -64,8 +64,6 @@ router.post('/edit',
     Todo.edit(id, text, req.user.id, ajaxHandleTodoData(res));
   });
 
-router.use(express.static(path.join(client.userTodo, 'public')));
-
 router.use((err, req, res, next) => {
   console.error('***/u error***');
   console.error(err);

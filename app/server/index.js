@@ -31,7 +31,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(clientPath));
-app.use(express.static(path.join(appPath, '..', 'node_modules')));
 
 app.use(session({
   name: 'more-less-todo-session',

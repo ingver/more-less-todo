@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node index.js",
-    "build": "./node_modules/.bin/gulp --gulpfile ./build.babel.js"
+    "build": "webpack --config webpack.congid.js",
+    "dev": "node_modules/.bin/webpack-dev-server --hot --inline"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -20,7 +21,7 @@
     "pug": "^2.0.0-beta6",
     "ramda": "^0.22.1",
     "serve-favicon": "~2.3.0",
-    "vue": "^2.0.5",
+    "vue": "^2.1.5",
     "vue-resource": "^1.0.3"
   },
   "engines": {
@@ -33,6 +34,7 @@
     "browser-sync": "^2.18.2",
     "browserify": "^13.1.1",
     "browserify-hmr": "^0.3.5",
+    "css-loader": "^0.26.1",
     "del": "^2.2.2",
     "event-stream": "^3.3.4",
     "gulp": "^3.9.1",
@@ -44,6 +46,10 @@
     "gulp-util": "^3.0.7",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "vueify": "^9.3.0"
+    "vue-loader": "^10.0.2",
+    "vue-template-compiler": "^2.1.5",
+    "vueify": "^9.3.0",
+    "webpack": "^2.1.0-beta.28",
+    "webpack-dev-server": "^2.1.0-beta.12"
   }
 }

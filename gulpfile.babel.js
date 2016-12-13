@@ -123,7 +123,8 @@ gulp.task('build:prod', ['clean'], done => {
 
 
 gulp.task('clean', () => {
-  return del(clientDir + '**/public/**');
+  const buildDir = clientDir + 'dist/';
+  return del(buildDir);
 });
 
 

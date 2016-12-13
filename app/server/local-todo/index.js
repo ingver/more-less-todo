@@ -1,5 +1,4 @@
 const path           = require('path');
-const express        = require('express');
 const { renderSafe } = require('../utils');
 const clientPaths    = require('../config').paths.client;
 
@@ -13,8 +12,6 @@ function initTodo(app) {
   app.get('/local-todo', function(req, res) {
     renderSafe(res, templatePath, { title });
   });
-
-  app.use('/local-todo', express.static(path.join(localTodoPath, 'public')));
 }
 
 
