@@ -11,10 +11,9 @@ You can try it [here](https://more-less-todo.herokuapp.com/)
 ---
 
 ## Features
-- Local TODO list (persists in localStorage)
+- Local TODO list (persisted in localStorage)
 - Registration and user's own TODO list
 - User sessions
-- Fits mobile devices (thnx Boostrap)
 
 ---
 
@@ -28,24 +27,24 @@ You can try it [here](https://more-less-todo.herokuapp.com/)
 
 ### Installation
 - Clone repo:
-  ```
-    git clone https://github.com/ingver/more-less-todo.git && cd more-less-todo
+  ```bash
+  git clone https://github.com/ingver/more-less-todo.git && cd more-less-todo
   ```
 - Install dependencies:
-  ```
+  ```bash
   npm install
   ```
 
 - Make sure that Postgres and Redis are up.
 
 - Init Postgres tables (default DB name is `todo`; you can change it in `app/config.js`):
-  ```
+  ```bash
   node app/initdb.js
   ```
   You need to do that just once.
 
 - Start an application:
-  ```
+  ```bash
   npm start
   ```
 
