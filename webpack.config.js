@@ -41,7 +41,12 @@ module.exports = {
   devtool: 'cheap-eval-sourcemaps',
 
   plugins: [
-    new Webpack.HotModuleReplacementPlugin()
+    new Webpack.HotModuleReplacementPlugin(),
+    new Webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
   ]
 
 };
