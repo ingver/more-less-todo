@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node index.js",
-    "build": "webpack --config webpack.congid.js",
-    "dev": "node_modules/.bin/webpack-dev-server --hot --inline"
+    "build": "webpack --config webpack.config.js",
+    "dev": "node_modules/.bin/webpack-dev-server --progress"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -44,12 +44,13 @@
     "gulp-sourcemaps": "^2.2.0",
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
+    "source-map-loader": "^0.2.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "vue-loader": "^10.0.2",
     "vue-template-compiler": "^2.1.5",
     "vueify": "^9.3.0",
-    "webpack": "^2.1.0-beta.28",
-    "webpack-dev-server": "^2.1.0-beta.12"
+    "webpack": "^2.5.0",
+    "webpack-dev-server": "^2.4.5"
   }
 }
